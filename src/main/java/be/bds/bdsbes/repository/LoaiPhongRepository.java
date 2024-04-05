@@ -19,7 +19,7 @@ public interface LoaiPhongRepository extends JpaRepository<LoaiPhong, Long> {
     @Query(value = "select new be.bds.bdsbes.payload.LoaiPhongResponse1(l.id, l.maLoaiPhong, l.tenLoaiPhong, l.soNguoi, l.tienIch, l.ghiChu, l.giaTheoNgay, l.giaTheoGio) from LoaiPhong l")
     List<LoaiPhongResponse1> singleListRoomType();
 
-    @Query("select new be.bds.bdsbes.payload.LoaiPhongResponse1(l.id, l.maLoaiPhong, l.tenLoaiPhong, l.soNguoi, l.ghiChu, l.tienIch, l.giaTheoNgay, l.giaTheoGio) from LoaiPhong l where l.id = :id")
+    @Query("select new be.bds.bdsbes.payload.LoaiPhongResponse1(l.id, l.maLoaiPhong, l.tenLoaiPhong, l.soNguoi, l.tienIch, l.ghiChu, l.giaTheoNgay, l.giaTheoGio) from LoaiPhong l where l.id = :id")
     LoaiPhongResponse1 get(Long id);
 
 //    @Transactional

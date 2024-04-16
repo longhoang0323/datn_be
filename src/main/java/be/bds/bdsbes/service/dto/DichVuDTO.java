@@ -25,12 +25,17 @@ public class DichVuDTO {
     @NotNull(message = "Not allow null")
     private BigDecimal giaDichVu;
     private  Integer trangThai = 1;
+    private int soLuong;
+    private String image;
+
 
     public DichVu dto(DichVu dichVu){
         dichVu.setTenDichVu(this.getTenDichVu());
         dichVu.setGhiChu(this.getGhiChu());
         dichVu.setGiaDichVu(this.getGiaDichVu());
         dichVu.setTrangThai(this.getTrangThai());
+        dichVu.setSoLuong(this.getSoLuong());
+        dichVu.setImage(this.getImage());
         return dichVu;
     }
 }

@@ -17,5 +17,7 @@ public class DichVuResponse1 {
     private String ghiChu;
     private BigDecimal giaDichVu;
     private Integer trangThai;
+    private int soLuong;
+    private String image;
 
 }

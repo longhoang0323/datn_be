@@ -5,6 +5,7 @@ import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Builder
 @AllArgsConstructor
@@ -20,6 +21,8 @@ public class ChiTietDichVu {
     public static final String COLUMN_GHICHU_NAME = "ghi_chu";
     public static final String COLUMN_GIADICHVU_NAME = "gia_dich_vu";
     public static final String COLUMN_TRANGTHAI_NAME = "trang_thai";
+    public static final String COLUMN_SOLUONG_NAME = "so_luong";
+    public static final String COLUMN_THOIGIANDAT_NAME = "thoi_gian_dat";
 
 
     @Id
@@ -45,5 +48,11 @@ public class ChiTietDichVu {
 
     @Column(name = COLUMN_TRANGTHAI_NAME)
     private Integer trangThai;
+
+    @Column(name = COLUMN_SOLUONG_NAME)
+    private int soLuong;
+
+    @Column(name = COLUMN_THOIGIANDAT_NAME)
+    private LocalDateTime thoiGianDat;
 
 }

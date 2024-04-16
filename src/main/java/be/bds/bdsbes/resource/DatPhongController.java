@@ -317,4 +317,20 @@ public class DatPhongController {
             throw new RuntimeException(e);
         }
     }
+
+    @GetMapping("/list-mapper")
+    public ResponseEntity<?> getListMapping() {
+            return ResponseEntity.ok(this.iDatPhongService.getListDatPhongMapping());
+    }
+    @GetMapping("/list-map-by-hoa-don")
+    public ResponseEntity<?> getListMappingByHD(@RequestParam(name = "id") Long id, @RequestParam(name = "idHD") Long idHD) {
+        return ResponseEntity.ok(this.iDatPhongService.getListMappingByHD(id, idHD));
+    }
+
+
+    @GetMapping("/get-by-id")
+    public ResponseEntity<?> get(@RequestParam(name = "id") Long id) {
+        return ResponseEntity.ok(this.iDatPhongService.getPhongById(id));
+    }
+
 }

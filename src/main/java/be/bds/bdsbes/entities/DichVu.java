@@ -25,6 +25,7 @@ public class DichVu {
     public static final String COLUMN_GHICHU_NAME = "ghi_chu";
     public static final String COLUMN_GIADICHVU_NAME = "gia_dich_vu";
     public static final String COLUMN_TRANGTHAI_NAME = "trang_thai";
+    public static final String COLUMN_SOLUONG_NAME = "so_luong";
 
 
     @Id
@@ -51,6 +52,12 @@ public class DichVu {
 
     @Column(name = COLUMN_TRANGTHAI_NAME)
     private Integer trangThai;
+
+    @Column(name = COLUMN_SOLUONG_NAME)
+    private int soLuong;
+
+    @Column(name = "image")
+    private String image;
 
     @OneToMany(mappedBy = "dichVu")
     private Set<ChiTietDichVu> chiTietDichVus = new LinkedHashSet<>();

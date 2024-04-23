@@ -17,14 +17,19 @@ public class ChiTietDichVuDTO {
     private Long idDatPhong;
     private String ghiChu;
     private BigDecimal giaDichVu;
-    private  int trangThai;
+    private Integer trangThai;
+    private int soLuong;
+    private LocalDateTime thoiGianDat;
+
 
     public ChiTietDichVu dto(ChiTietDichVu chiTietDichVu){
         chiTietDichVu.setDichVu(DichVu.builder().id(this.getIdDichVu()).build());
         chiTietDichVu.setDatPhong(DatPhong.builder().id(this.getIdDatPhong()).build());
-        chiTietDichVu.setGhiChu(String.valueOf(LocalDateTime.now()));
+        chiTietDichVu.setGhiChu(this.getGhiChu());
         chiTietDichVu.setGiaDichVu(this.getGiaDichVu());
         chiTietDichVu.setTrangThai(this.getTrangThai());
+        chiTietDichVu.setSoLuong(this.getSoLuong());
+        chiTietDichVu.setThoiGianDat(LocalDateTime.now());
         return chiTietDichVu;
     }
 }

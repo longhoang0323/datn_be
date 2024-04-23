@@ -2,6 +2,7 @@ package be.bds.bdsbes.repository;
 
 import be.bds.bdsbes.entities.DatPhong;
 import be.bds.bdsbes.entities.Phong;
+import be.bds.bdsbes.payload.DatPhongMapping;
 import be.bds.bdsbes.service.dto.response.DatPhongResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -85,4 +86,16 @@ public interface DatPhongRepository extends JpaRepository<DatPhong, Long> {
 
     @Query("select d from DatPhong d where d.khachHang.id = :id")
     Page<DatPhong> getPageDatPhongByKH(Pageable pageable, Long id);
+
+    @Query("select new be.bds.bdsbes.payload.DatPhongMapping(p.id, d.ma, k.id, k.ma, k.hoTen, k.sdt, " +
+            "d.ngayDat, d.checkIn, d.checkOut, d.soNguoi, d.ghiChu, d.trangThai, p.ma, d.tongGia, d.id, p.loaiPhong.tenLoaiPhong, p.loaiPhong.giaTheoNgay, ctp.tang, h.id, h.ma, k.cccd, k.ngaySinh" +
+            ", h.ngayTao, h.ngayThanhToan, h.tongTien, h.trangThai)" +
+            " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id order by p.ma asc")
+    List<DatPhongMapping> getListDatPhong();
+
+    @Query("select new be.bds.bdsbes.payload.DatPhongMapping(p.id, d.ma, k.id, k.ma, k.hoTen, k.sdt, " +
+            "d.ngayDat, d.checkIn, d.checkOut, d.soNguoi, d.ghiChu, d.trangThai, p.ma, d.tongGia, d.id, p.loaiPhong.tenLoaiPhong, p.loaiPhong.giaTheoNgay, ctp.tang, h.id, h.ma, k.cccd, k.ngaySinh" +
+            ", h.ngayTao, h.ngayThanhToan, h.tongTien, h.trangThai)" +
+            " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id where p.id = :id")
+    DatPhongMapping getPhongById(Long id);
 }

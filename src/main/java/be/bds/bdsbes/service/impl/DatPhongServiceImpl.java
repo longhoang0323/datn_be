@@ -4,6 +4,7 @@ import be.bds.bdsbes.domain.User;
 import be.bds.bdsbes.entities.*;
 import be.bds.bdsbes.entities.enums.StatusRoom;
 import be.bds.bdsbes.exception.ServiceException;
+import be.bds.bdsbes.payload.DatPhongMapping;
 import be.bds.bdsbes.payload.PhongResponse1;
 import be.bds.bdsbes.repository.*;
 import be.bds.bdsbes.service.dto.KhachHangDTO;
@@ -556,6 +557,27 @@ public class DatPhongServiceImpl implements IDatPhongService {
                 entities.isLast(),
                 entities.getSort().toString()
         );
+    }
+
+    @Override
+    public List<DatPhongMapping> getListDatPhongMapping() {
+        return datPhongRepository.getListDatPhong();
+    }
+
+    @Override
+    public DatPhongMapping getPhongById(Long id) {
+        return datPhongRepository.getPhongById(id);
+    }
+
+    @Override
+    public List<DatPhongMapping> getListMappingByHD(Long id, Long idHD) {
+        List<DatPhongMapping> listDP = new ArrayList<>();
+        for(int x = 0;x < datPhongRepository.getListDatPhong().size();x++){
+            if(datPhongRepository.getListDatPhong().get(x).getIdHoaDon() == idHD && datPhongRepository.getListDatPhong().get(x).getIdDatPhong() != id){
+                listDP.add(datPhongRepository.getListDatPhong().get(x));
+            }
+        }
+        return listDP;
     }
 
 }

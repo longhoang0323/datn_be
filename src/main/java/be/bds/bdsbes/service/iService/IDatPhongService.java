@@ -3,6 +3,7 @@ package be.bds.bdsbes.service.iService;
 
 import be.bds.bdsbes.entities.DatPhong;
 import be.bds.bdsbes.exception.ServiceException;
+import be.bds.bdsbes.payload.DatPhongMapping;
 import be.bds.bdsbes.payload.PhongResponse1;
 import be.bds.bdsbes.payload.TaiKhoanResponse1;
 import be.bds.bdsbes.service.dto.DatPhongDTO;
@@ -51,4 +52,9 @@ public interface IDatPhongService {
 
     PagedResponse<DatPhongResponse> getDatPhongByKH(int page, int size, Long id) throws ServiceException;
 
+    List<DatPhongMapping> getListDatPhongMapping();
+
+    DatPhongMapping getPhongById(Long id);
+
+    List<DatPhongMapping> getListMappingByHD(Long id, Long idHD);
 }

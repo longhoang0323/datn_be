@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,4 +21,7 @@ public class ChiTietDichVuResponse1 {
     private String ghiChu;
     private BigDecimal giaDichVu;
     private Integer trangThai;
+    private int soLuong;
+    private LocalDateTime thoiGianDat;
+
 }

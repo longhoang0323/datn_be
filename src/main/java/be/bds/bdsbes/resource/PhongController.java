@@ -344,4 +344,13 @@ public class PhongController {
             @RequestParam(value = "input", defaultValue = "") String tenLoaiPhong) throws ServiceException {
         return ResponseUtil.wrap(this.iPhongService.getListRoomByLoaiPhong(page, size, tenLoaiPhong));
     }
+
+    @GetMapping("list-mapper")
+    public ResponseEntity<?> getListMapping(
+            @RequestParam(value = "checkIn", defaultValue = "") String checkIn,
+            @RequestParam(value = "checkOut", defaultValue = "") String checkOut
+    ){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return ResponseEntity.ok(this.iPhongService.getListMapping(LocalDate.parse(checkIn, formatter), LocalDate.parse(checkOut, formatter)));
+    }
 }

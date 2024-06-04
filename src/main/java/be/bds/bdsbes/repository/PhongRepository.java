@@ -1,6 +1,7 @@
 package be.bds.bdsbes.repository;
 
 import be.bds.bdsbes.entities.Phong;
+import be.bds.bdsbes.payload.PhongMappingResponse;
 import be.bds.bdsbes.payload.PhongResponse1;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -137,4 +138,9 @@ public interface PhongRepository extends JpaRepository<Phong, Long> {
 //            " or cast(:checkOut as date) = cast(d.checkOut as date)))")
 //    Page<Phong> getRoomByCheckDateandAll(Pageable pageable,@Param("tienIch") List<String> tienIch, String tenLoaiPhong, LocalDateTime checkIn, LocalDateTime checkOut);
 
+    @Query("select new be.bds.bdsbes.payload.PhongMappingResponse(p.id, p.ma, p.trangThai, l.id, l.tenLoaiPhong, l.giaTheoNgay, l.giaTheoGio, l.soNguoi, l.tienIch, l.ghiChu, count(d.id)) from Phong p inner join LoaiPhong l on p.loaiPhong.id = l.id left join DatPhong d on p.id = d.phong.id " +
+            "where (cast(d.checkIn as date) >= cast(:checkIn as date) and cast(d.checkOut as date) <= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkIn as date)) or " +
+            " (cast(d.checkIn as date) <= cast(:checkOut as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (d.checkIn is null or d.checkOut is null)" +
+            "group by p.id, p.ma, p.trangThai, l.id, l.tenLoaiPhong, l.giaTheoNgay, l.giaTheoGio, l.soNguoi, l.tienIch, l.ghiChu")
+    List<PhongMappingResponse> getListMapping(LocalDate checkIn, LocalDate checkOut);
 }

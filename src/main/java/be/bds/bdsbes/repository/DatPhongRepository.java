@@ -96,6 +96,15 @@ public interface DatPhongRepository extends JpaRepository<DatPhong, Long> {
     @Query("select new be.bds.bdsbes.payload.DatPhongMapping(p.id, d.ma, k.id, k.ma, k.hoTen, k.sdt, " +
             "d.ngayDat, d.checkIn, d.checkOut, d.soNguoi, d.ghiChu, d.trangThai, p.ma, d.tongGia, d.id, p.loaiPhong.tenLoaiPhong, p.loaiPhong.giaTheoNgay, ctp.tang, h.id, h.ma, k.cccd, k.ngaySinh" +
             ", h.ngayTao, h.ngayThanhToan, h.tongTien, h.trangThai)" +
-            " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id where p.id = :id")
+            " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id where d.id = :id")
     DatPhongMapping getPhongById(Long id);
+
+    @Query("select new be.bds.bdsbes.payload.DatPhongMapping(p.id, d.ma, k.id, k.ma, k.hoTen, k.sdt, " +
+            "d.ngayDat, d.checkIn, d.checkOut, d.soNguoi, d.ghiChu, d.trangThai, p.ma, d.tongGia, d.id, p.loaiPhong.tenLoaiPhong, p.loaiPhong.giaTheoNgay, ctp.tang, h.id, h.ma, k.cccd, k.ngaySinh" +
+            ", h.ngayTao, h.ngayThanhToan, h.tongTien, h.trangThai)" +
+            " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id" +
+            " where d.phong.id = :id and " +
+            "((cast(d.checkIn as date) >= cast(:checkIn as date) and cast(d.checkOut as date) <= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkIn as date)) or " +
+            " (cast(d.checkIn as date) <= cast(:checkOut as date) and cast(d.checkOut as date) >= cast(:checkOut as date)))")
+    List<DatPhongMapping> getListDatPhongByDate(Long id, LocalDate checkIn, LocalDate checkOut);
 }

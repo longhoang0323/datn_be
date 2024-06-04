@@ -57,4 +57,6 @@ public interface IDatPhongService {
     DatPhongMapping getPhongById(Long id);
 
     List<DatPhongMapping> getListMappingByHD(Long id, Long idHD);
+
+    List<DatPhongMapping> getListMappingByDate(Long id, LocalDate checkIn, LocalDate checkOut);
 }

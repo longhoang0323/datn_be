@@ -142,12 +142,13 @@ public class DatPhongController {
             throw new RuntimeException(e);
         }
     }
+
     @GetMapping("/lich-su-dat-phong")
     public ResponseEntity<?> getLichSuDatPhong(
             @RequestParam(value = "page", defaultValue = AppConstantsUtil.DEFAULT_PAGE_NUMBER) int page,
             @RequestParam(value = "size", defaultValue = AppConstantsUtil.DEFAULT_PAGE_SIZE) int size,
             @RequestParam(value = "id", defaultValue = AppConstantsUtil.DEFAULT_PAGE_SIZE) Long id
-            ) {
+    ) {
         try {
             return ResponseUtil.wrap(this.iDatPhongService.getLichSuDatPhong(page, size, id));
         } catch (Exception ex) {
@@ -157,6 +158,7 @@ public class DatPhongController {
             throw new RuntimeException(e);
         }
     }
+
     @GetMapping("/list-room-order-by-upper-price")
     public ResponseEntity<?> getListRoomByUpperPrice(
             @RequestParam(value = "page", defaultValue = AppConstantsUtil.DEFAULT_PAGE_NUMBER) int page,
@@ -285,11 +287,11 @@ public class DatPhongController {
     }
 
     @GetMapping("so-phong-da-dat")
-    public ResponseEntity<?> sophongdadat(@RequestParam(value = "checkIn") String checkIn,@RequestParam(value = "checkOut") String checkOut) {
+    public ResponseEntity<?> sophongdadat(@RequestParam(value = "checkIn") String checkIn, @RequestParam(value = "checkOut") String checkOut) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate parsedCheckIn = LocalDate.parse(checkIn, formatter);
         LocalDate parsedCheckOut = LocalDate.parse(checkOut, formatter);
-        return ResponseUtil.wrap(this.iDatPhongService.getSoPhongDaDat(parsedCheckIn,parsedCheckOut));
+        return ResponseUtil.wrap(this.iDatPhongService.getSoPhongDaDat(parsedCheckIn, parsedCheckOut));
     }
 
     @PostMapping("dat-phong-tai-quay")
@@ -320,17 +322,26 @@ public class DatPhongController {
 
     @GetMapping("/list-mapper")
     public ResponseEntity<?> getListMapping() {
-            return ResponseEntity.ok(this.iDatPhongService.getListDatPhongMapping());
+        return ResponseEntity.ok(this.iDatPhongService.getListDatPhongMapping());
     }
+
     @GetMapping("/list-map-by-hoa-don")
     public ResponseEntity<?> getListMappingByHD(@RequestParam(name = "id") Long id, @RequestParam(name = "idHD") Long idHD) {
         return ResponseEntity.ok(this.iDatPhongService.getListMappingByHD(id, idHD));
     }
 
-
     @GetMapping("/get-by-id")
     public ResponseEntity<?> get(@RequestParam(name = "id") Long id) {
         return ResponseEntity.ok(this.iDatPhongService.getPhongById(id));
+    }
+
+    @GetMapping("/list-map-by-search")
+    public ResponseEntity<?> getListMappingBySearch
+            (@RequestParam(name = "id") Long id,
+             @RequestParam(value = "checkIn", defaultValue = "") String checkIn,
+             @RequestParam(value = "checkOut", defaultValue = "") String checkOut) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return ResponseEntity.ok(this.iDatPhongService.getListMappingByDate(id, LocalDate.parse(checkIn, formatter), LocalDate.parse(checkOut, formatter)));
     }
 
 }

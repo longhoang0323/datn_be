@@ -580,4 +580,9 @@ public class DatPhongServiceImpl implements IDatPhongService {
         return listDP;
     }
 
+    @Override
+    public List<DatPhongMapping> getListMappingByDate(Long id, LocalDate checkIn, LocalDate checkOut) {
+        return datPhongRepository.getListDatPhongByDate(id, checkIn, checkOut);
+    }
+
 }

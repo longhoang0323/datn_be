@@ -130,6 +130,7 @@ public class KhachHangServiceImpl implements IKhachHangService {
                 kh.setSdt(khachHangDTO.getSdt());
                 kh.setHoTen(khachHangDTO.getHoTen());
                 kh.setCccd(khachHangDTO.getCccd());
+                kh.setNgaySinh(khachHangDTO.getNgaySinh());
                 this.khachHangRepository.save(kh);
                 return true;
             }
@@ -143,6 +144,7 @@ public class KhachHangServiceImpl implements IKhachHangService {
         khachHang.setHoTen(khachHangDTO.getHoTen());
         khachHang.setCccd(khachHangDTO.getCccd());
         khachHang.setSdt(khachHangDTO.getSdt());
+        khachHang.setNgaySinh(khachHangDTO.getNgaySinh());
         khachHang.setTheThanhVien(TheThanhVien.builder().id(Long.parseLong("1")).build());
         this.khachHangRepository.save(khachHang);
         return true;

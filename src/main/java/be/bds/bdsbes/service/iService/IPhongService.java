@@ -2,6 +2,7 @@ package be.bds.bdsbes.service.iService;
 
 import be.bds.bdsbes.entities.Phong;
 import be.bds.bdsbes.exception.ServiceException;
+import be.bds.bdsbes.payload.PhongMappingResponse;
 import be.bds.bdsbes.payload.PhongResponse1;
 import be.bds.bdsbes.payload.RoomMappingChiTietPhong;
 import be.bds.bdsbes.service.dto.PhongDTO;
@@ -67,4 +68,6 @@ public interface IPhongService {
     PagedResponse<PhongResponse1> getListRoomByCheckDateandTienIch(int page, int size, List<String> tienIch, LocalDateTime checkIn, LocalDateTime checkOut) throws ServiceException;
 
     PagedResponse<PhongResponse1> getListRoomByCheckDateandAll(int page, int size, List<String> tienIch, String tenLoaiPhong, LocalDateTime checkIn, LocalDateTime checkOut) throws ServiceException;
+
+    List<PhongMappingResponse> getListMapping(LocalDate checkIn, LocalDate checkOut);
 }

@@ -358,4 +358,14 @@ public class PhongController {
     public ResponseEntity<?> getOneMapping(@RequestParam(value = "id") Long id) {
         return ResponseEntity.ok(iPhongService.getPhongMapping(id));
     }
+
+    @GetMapping("get-so-lan-dat-phong")
+    public ResponseEntity<?> getCountPhongDat(@RequestParam(value = "id") Long id,
+                                              @RequestParam(value = "checkIn", defaultValue = "") String checkIn,
+                                              @RequestParam(value = "checkOut", defaultValue = "") String checkOut) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate parsedCheckIn = LocalDate.parse(checkIn, formatter);
+        LocalDate parsedCheckOut = LocalDate.parse(checkOut, formatter);
+        return ResponseUtil.wrap(this.iPhongService.getCountPhongDat(id, parsedCheckIn, parsedCheckOut));
+    }
 }

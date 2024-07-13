@@ -808,4 +808,9 @@ public class PhongServiceImpl implements IPhongService {
         return phongRepository.getPhongMapping(id);
     }
 
+    @Override
+    public int getCountPhongDat(Long id, LocalDate checkIn, LocalDate checkOut) {
+        return phongRepository.getCountDatPhong(id, checkIn, checkOut);
+    }
+
 }

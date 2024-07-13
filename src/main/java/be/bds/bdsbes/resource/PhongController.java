@@ -353,4 +353,9 @@ public class PhongController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return ResponseEntity.ok(this.iPhongService.getListMapping(LocalDate.parse(checkIn, formatter), LocalDate.parse(checkOut, formatter)));
     }
+
+    @GetMapping("get-by-id")
+    public ResponseEntity<?> getOneMapping(@RequestParam(value = "id") Long id) {
+        return ResponseEntity.ok(iPhongService.getPhongMapping(id));
+    }
 }

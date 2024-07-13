@@ -2,6 +2,7 @@ package be.bds.bdsbes.service.impl;
 
 import be.bds.bdsbes.entities.Phong;
 import be.bds.bdsbes.exception.ServiceException;
+import be.bds.bdsbes.payload.PhongMapping;
 import be.bds.bdsbes.payload.PhongMappingResponse;
 import be.bds.bdsbes.payload.PhongResponse1;
 import be.bds.bdsbes.payload.RoomMappingChiTietPhong;
@@ -800,6 +801,11 @@ public class PhongServiceImpl implements IPhongService {
     @Override
     public List<PhongMappingResponse> getListMapping(LocalDate checkIn, LocalDate checkOut) {
         return phongRepository.getListMapping(checkIn, checkOut);
+    }
+
+    @Override
+    public PhongMapping getPhongMapping(Long id) {
+        return phongRepository.getPhongMapping(id);
     }
 
 }

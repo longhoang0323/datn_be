@@ -1,6 +1,7 @@
 package be.bds.bdsbes.repository;
 
 import be.bds.bdsbes.entities.Phong;
+import be.bds.bdsbes.payload.PhongMapping;
 import be.bds.bdsbes.payload.PhongMappingResponse;
 import be.bds.bdsbes.payload.PhongResponse1;
 import org.springframework.data.domain.Page;
@@ -143,4 +144,7 @@ public interface PhongRepository extends JpaRepository<Phong, Long> {
             " (cast(d.checkIn as date) <= cast(:checkOut as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (d.checkIn is null or d.checkOut is null)" +
             "group by p.id, p.ma, p.trangThai, l.id, l.tenLoaiPhong, l.giaTheoNgay, l.giaTheoGio, l.soNguoi, l.tienIch, l.ghiChu")
     List<PhongMappingResponse> getListMapping(LocalDate checkIn, LocalDate checkOut);
+
+    @Query("select new be.bds.bdsbes.payload.PhongMapping(p.id, p.ma, p.trangThai, l.id, l.tenLoaiPhong, l.giaTheoNgay, l.giaTheoGio, l.soNguoi, l.tienIch, l.ghiChu) from Phong p inner join LoaiPhong l on p.loaiPhong.id = l.id where p.id = :id")
+    PhongMapping getPhongMapping(Long id);
 }

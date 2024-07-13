@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -40,9 +41,58 @@ public interface LoaiPhongRepository extends JpaRepository<LoaiPhong, Long> {
             " and (l.soNguoi = :soNguoi or l.soNguoi = (:soNguoi + 1))")
     List<LoaiPhongResponse1> listLoaiPhongBySearch2(int soPhong, int soNguoi);
 
-    @Query("select count(p.id) from Phong p inner join ChiTietPhong ct on p.id = ct.phong.id inner join LoaiPhong l on p.loaiPhong.id = l.id where p.trangThai = 1 and ct.trangThai = 1 and p.id not in (select d.phong.id from DatPhong d where (d.trangThai = 1 or d.trangThai = 2) and ((cast(:checkIn as date) > cast(d.checkIn as date) and" +
-            " cast(:checkIn as date) < cast(d.checkOut as date)) or (cast(:checkOut as date) > cast(d.checkIn as date) and cast(:checkOut as date) < cast(d.checkOut as date)) " +
-            " or (cast(d.checkIn as date) > cast(:checkIn as date) and cast(d.checkIn as date) < cast(:checkOut as date)) or (cast(d.checkOut as date) > cast(:checkIn as date) and cast(d.checkOut as date) < cast(:checkOut as date)) or cast(:checkIn as date) = cast(d.checkIn as date) " +
-            " or cast(:checkOut as date) = cast(d.checkOut as date))) and l.id = :idLoaiPhong")
-    int getCountRoomByCheckDate(LocalDateTime checkIn, LocalDateTime checkOut, Long idLoaiPhong);
+    @Query("SELECT COUNT(p.id) " +
+            "FROM Phong p " +
+            "INNER JOIN p.loaiPhong lp " +
+            "WHERE p.trangThai = 1 " +
+            "AND p.id NOT IN (" +
+            "    SELECT dp.phong.id " +
+            "    FROM DatPhong dp " +
+            "    WHERE dp.trangThai IN (1, 2) " +
+            "    AND (" +
+            "        (:checkIn >= dp.checkIn AND :checkIn < dp.checkOut) " +
+            "        OR (:checkOut > dp.checkIn AND :checkOut <= dp.checkOut) " +
+            "        OR (:checkIn <= dp.checkIn AND :checkOut >= dp.checkOut)" +
+            "    )" +
+            ") " +
+            "AND lp.id = :idLoaiPhong")
+    int getCountRoomByCheckDate(
+            @Param("checkIn") LocalDateTime checkIn,
+            @Param("checkOut") LocalDateTime checkOut,
+            @Param("idLoaiPhong") Long idLoaiPhong
+    );
+
+//    @Query(value = "SELECT TOP 1 p.id " +
+//            "FROM phong p " +
+//            "JOIN loai_phong lp ON p.id_loai_phong = lp.id " +
+//            "LEFT JOIN dat_phong dp ON p.id = dp.id_phong " +
+//            "WHERE lp.ten_loai_phong LIKE CONCAT('%', :tenLoaiPhong, '%') " +
+//            "AND (dp.id IS NULL " +
+//            "OR (CAST(:startDate AS DATE) IS NULL OR CAST(:endDate AS DATE) IS NULL " +
+//            "OR NOT (CAST(:startDate AS DATE) < dp.check_out AND CAST(:endDate AS DATE) > dp.check_in) " +
+//            "))",
+//            nativeQuery = true)
+//    Long findTopIdByTenLoaiPhongAndDateRange(
+//            @Param("tenLoaiPhong") String tenLoaiPhong,
+//            @Param("startDate") LocalDateTime startDate,
+//            @Param("endDate") LocalDateTime endDate
+//    );
+
+    @Query(value = "SELECT TOP 1 p.id " +
+            "FROM phong p " +
+            "JOIN loai_phong lp ON p.id_loai_phong = lp.id " +
+            "LEFT JOIN dat_phong dp ON p.id = dp.id_phong AND dp.trang_thai = 0 " +
+            "WHERE lp.ten_loai_phong LIKE CONCAT('%', :tenLoaiPhong, '%') " +
+            "AND (dp.id IS NULL " +
+            "OR (CAST(:startDate AS DATE) IS NULL OR CAST(:endDate AS DATE) IS NULL " +
+            "OR NOT (CAST(:startDate AS DATE) < dp.check_out AND CAST(:endDate AS DATE) > dp.check_in) " +
+            "))",
+            nativeQuery = true)
+    Long findTopIdByTenLoaiPhongAndDateRange(
+            @Param("tenLoaiPhong") String tenLoaiPhong,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate
+    );
+
+
 }

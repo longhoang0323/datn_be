@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,7 +132,23 @@ public class LoaiPhongServiceImpl implements ILoaiPhongService {
             for (int x = 0; x < listLoaiPhong.size(); x++) {
                 int soPhongTheoLoai = loaiPhongRepository.getCountRoomByCheckDate(checkIn, checkOut, listLoaiPhong.get(x).getId());
                 if(soPhongTheoLoai >= soPhong){
-                    listLP.add(listLoaiPhong.get(x));
+                    LoaiPhongResponse1 original = listLoaiPhong.get(x);
+                    LoaiPhongResponse1 newLoaiPhong = new LoaiPhongResponse1();
+
+                    newLoaiPhong.setId(original.getId());
+                    newLoaiPhong.setSoNguoi(original.getSoNguoi());
+                    newLoaiPhong.setMaLoaiPhong(original.getMaLoaiPhong());
+                    newLoaiPhong.setTenLoaiPhong(original.getTenLoaiPhong());
+                    newLoaiPhong.setTienIch(original.getTienIch());
+                    newLoaiPhong.setGhiChu(original.getGhiChu());
+                    newLoaiPhong.setGiaTheoNgay(original.getGiaTheoNgay());
+                    Long giaTheoGio = loaiPhongRepository.findTopIdByTenLoaiPhongAndDateRange(original.getTenLoaiPhong(), checkIn, checkOut);
+                    if(giaTheoGio == null){
+                        newLoaiPhong.setGiaTheoGio(null);
+                    } else {
+                        newLoaiPhong.setGiaTheoGio(BigDecimal.valueOf(giaTheoGio));
+                    }
+                    listLP.add(newLoaiPhong);
                 }
             }
         }
@@ -146,7 +163,20 @@ public class LoaiPhongServiceImpl implements ILoaiPhongService {
             for (int x = 0; x < listLoaiPhong.size(); x++) {
                 int soPhongTheoLoai = loaiPhongRepository.getCountRoomByCheckDate(checkIn, checkOut, listLoaiPhong.get(x).getId());
                 if(soPhongTheoLoai >= soPhong){
-                    listLP.add(listLoaiPhong.get(x));
+                    LoaiPhongResponse1 original = listLoaiPhong.get(x);
+                    LoaiPhongResponse1 newLoaiPhong = new LoaiPhongResponse1();
+
+                    newLoaiPhong.setId(original.getId());
+                    newLoaiPhong.setSoNguoi(original.getSoNguoi());
+                    newLoaiPhong.setMaLoaiPhong(original.getMaLoaiPhong());
+                    newLoaiPhong.setTenLoaiPhong(original.getTenLoaiPhong());
+                    newLoaiPhong.setTienIch(original.getTienIch());
+                    newLoaiPhong.setGhiChu(original.getGhiChu());
+                    newLoaiPhong.setGiaTheoNgay(original.getGiaTheoNgay());
+                    Long giaTheoGio = loaiPhongRepository.findTopIdByTenLoaiPhongAndDateRange(original.getTenLoaiPhong(), checkIn, checkOut);
+                    newLoaiPhong.setGiaTheoGio(BigDecimal.valueOf(giaTheoGio));
+
+                    listLP.add(newLoaiPhong);
                 }
             }
         }

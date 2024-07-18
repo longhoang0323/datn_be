@@ -337,7 +337,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
         hoaDon.setNgayTao(LocalDateTime.now());
         hoaDon.setNgayThanhToan(hoaDonDTO.getNgayThanhToan());
         hoaDon.setTongTien(hoaDonDTO.getTongTien());
-        hoaDon.setTrangThai(3);
+        hoaDon.setTrangThai(hoaDonDTO.getTrangThai());
         hoaDon.setGhiChu(hoaDonDTO.getGhiChu());
 //        Long idKhachHang = khachHangRepository.findByIdKhachHang(hoaDonDTO.getIdKhachHang());
 //        if (idKhachHang == null) {

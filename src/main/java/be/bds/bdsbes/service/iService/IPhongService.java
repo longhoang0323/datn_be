@@ -73,4 +73,6 @@ public interface IPhongService {
     List<PhongMappingResponse> getListMapping(LocalDate checkIn, LocalDate checkOut);
 
     PhongMapping getPhongMapping(Long id);
+
+    int getCountPhongDat(Long id, LocalDate checkIn, LocalDate checkOut);
 }

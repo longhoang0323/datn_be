@@ -158,12 +158,23 @@ public interface PhongRepository extends JpaRepository<Phong, Long> {
 //            " or cast(:checkOut as date) = cast(d.checkOut as date)))")
 //    Page<Phong> getRoomByCheckDateandAll(Pageable pageable,@Param("tienIch") List<String> tienIch, String tenLoaiPhong, LocalDateTime checkIn, LocalDateTime checkOut);
 
+//    @Query("select new be.bds.bdsbes.payload.PhongMappingResponse(p.id, p.ma, p.trangThai, l.id, l.tenLoaiPhong, l.giaTheoNgay, l.giaTheoGio, l.soNguoi, l.tienIch, l.ghiChu, count(d.id)) from Phong p inner join LoaiPhong l on p.loaiPhong.id = l.id left join DatPhong d on p.id = d.phong.id " +
+//            "where (cast(d.checkIn as date) >= cast(:checkIn as date) and cast(d.checkOut as date) <= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkIn as date)) or " +
+//            " (cast(d.checkIn as date) <= cast(:checkOut as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (d.checkIn is null or d.checkOut is null)" +
+//            "group by p.id, p.ma, p.trangThai, l.id, l.tenLoaiPhong, l.giaTheoNgay, l.giaTheoGio, l.soNguoi, l.tienIch, l.ghiChu")
     @Query("select new be.bds.bdsbes.payload.PhongMappingResponse(p.id, p.ma, p.trangThai, l.id, l.tenLoaiPhong, l.giaTheoNgay, l.giaTheoGio, l.soNguoi, l.tienIch, l.ghiChu, count(d.id)) from Phong p inner join LoaiPhong l on p.loaiPhong.id = l.id left join DatPhong d on p.id = d.phong.id " +
+            "and ((cast(d.checkIn as date) >= cast(:checkIn as date) and cast(d.checkOut as date) <= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkIn as date)) or " +
+            " (cast(d.checkIn as date) <= cast(:checkOut as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (d.checkIn is null or d.checkOut is null)) where p.id not in (select p.id from Phong p inner join LoaiPhong l on p.loaiPhong.id = l.id left join DatPhong d on p.id = d.phong.id " +
             "where (cast(d.checkIn as date) >= cast(:checkIn as date) and cast(d.checkOut as date) <= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkIn as date)) or " +
-            " (cast(d.checkIn as date) <= cast(:checkOut as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (d.checkIn is null or d.checkOut is null)" +
+            "(cast(d.checkIn as date) <= cast(:checkOut as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (d.checkIn is null or d.checkOut is null)) or ((cast(d.checkIn as date) >= cast(:checkIn as date) and cast(d.checkOut as date) <= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkIn as date)) or " +
+            " (cast(d.checkIn as date) <= cast(:checkOut as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (d.checkIn is null or d.checkOut is null)) " +
             "group by p.id, p.ma, p.trangThai, l.id, l.tenLoaiPhong, l.giaTheoNgay, l.giaTheoGio, l.soNguoi, l.tienIch, l.ghiChu")
     List<PhongMappingResponse> getListMapping(LocalDate checkIn, LocalDate checkOut);
 
     @Query("select new be.bds.bdsbes.payload.PhongMapping(p.id, p.ma, p.trangThai, l.id, l.tenLoaiPhong, l.giaTheoNgay, l.giaTheoGio, l.soNguoi, l.tienIch, l.ghiChu) from Phong p inner join LoaiPhong l on p.loaiPhong.id = l.id where p.id = :id")
     PhongMapping getPhongMapping(Long id);
+
+    @Query("select count(d.phong.id) from DatPhong d where d.phong.id = :id and (cast(d.checkIn as date) >= cast(:checkIn as date) and cast(d.checkOut as date) <= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or " +
+            "(cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkIn as date)) or  (cast(d.checkIn as date) <= cast(:checkOut as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (d.checkIn is null or d.checkOut is null)")
+    int getCountDatPhong(Long id, LocalDate checkIn, LocalDate checkOut);
 }

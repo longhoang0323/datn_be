@@ -28,6 +28,21 @@ public class HoaDonDTO {
 
     private Long idKhachHang;
 
+    private BigDecimal tienCoc;
+
+    private LocalDateTime thoiGianCoc;
+
+    private BigDecimal tienPhong;
+
+    private BigDecimal tienDichVu;
+
+    private BigDecimal tienPhat;
+
+    private BigDecimal tienTichDiem;
+
+    private BigDecimal tienThanhToan;
+
+
     public HoaDon dto(HoaDon hoaDon){
         LocalDateTime localDateTime = LocalDateTime.now();
         hoaDon.setNgayTao(localDateTime);
@@ -36,6 +51,10 @@ public class HoaDonDTO {
         hoaDon.setTrangThai(this.getTrangThai());
         hoaDon.setGhiChu(this.getGhiChu());
         hoaDon.setKhachHang(KhachHang.builder().id(this.getIdKhachHang()).build());
+        hoaDon.setTienCoc(this.getTienCoc());
+        hoaDon.setThoiGianCoc(this.getThoiGianCoc());
+        hoaDon.setTienPhong(this.getTienPhong());
+        hoaDon.setTienTichDiem(this.getTienTichDiem());
         return hoaDon;
     }
 }

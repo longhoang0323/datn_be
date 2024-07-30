@@ -57,8 +57,16 @@ public class ChiTietDichVuServiceImpl implements IChiTietDichVuService {
 
     @Override
     public ChiTietDichVu create(ChiTietDichVuDTO chiTietDichVuDTO) {
-       ChiTietDichVu chiTietDichVu = chiTietDichVuDTO.dto(new ChiTietDichVu());
-        return chiTietDichVuRepository.save(chiTietDichVu);
+        ChiTietDichVu chiTietDichVuByDichVu = chiTietDichVuRepository.getChiTietDichVuByDichVu(chiTietDichVuDTO.getIdDichVu(), chiTietDichVuDTO.getIdDatPhong());
+        if(chiTietDichVuByDichVu == null){
+            ChiTietDichVu chiTietDichVu = chiTietDichVuDTO.dto(new ChiTietDichVu());
+            return chiTietDichVuRepository.save(chiTietDichVu);
+        }
+        if(chiTietDichVuByDichVu != null){
+            chiTietDichVuByDichVu.setSoLuong(chiTietDichVuByDichVu.getSoLuong() + chiTietDichVuDTO.getSoLuong());
+            return chiTietDichVuRepository.save(chiTietDichVuByDichVu);
+        }
+        return null;
     }
 
     @Override

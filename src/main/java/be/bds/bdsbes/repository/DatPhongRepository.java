@@ -36,7 +36,7 @@ public interface DatPhongRepository extends JpaRepository<DatPhong, Long> {
 
     @Query("SELECT CASE WHEN COUNT(dp) > 0 THEN true ELSE false END " +
             "FROM DatPhong dp " +
-            "WHERE dp.phong.id = :idPhong and (dp.trangThai = 1 or dp.trangThai = 2 or dp.trangThai = 4) and (cast(dp.checkIn as date) = cast(:checkIn as date) " +
+            "WHERE dp.phong.id = :idPhong and (dp.trangThai = 1 or dp.trangThai = 2 or dp.trangThai = 4 or dp.trangThai = 5) and (cast(dp.checkIn as date) = cast(:checkIn as date) " +
             "or (cast(dp.checkIn as date) < cast(:checkIn as date) and cast(dp.checkOut as date) > cast(:checkIn as date))" +
             "or (cast(dp.checkIn as date) >=" +
             " cast(:checkIn as date) and cast(dp.checkOut as date) <= cast(:checkOut as date)) " +
@@ -45,7 +45,7 @@ public interface DatPhongRepository extends JpaRepository<DatPhong, Long> {
     Boolean validateCheckIn(@Param("idPhong") Long idPhong, @Param("checkIn") LocalDateTime checkIn, LocalDateTime checkOut);
 
     @Query("Select p from Phong  p inner join ChiTietPhong ctp on p.id = ctp.phong.id where p.trangThai = 1 and ctp.trangThai = 1 and  p.giaPhong = :giaPhong and p.id <> :id and p.id not in " +
-            "(select d.phong.id from DatPhong d where (d.trangThai = 1 or d.trangThai = 2) and ((cast(:checkIn as date) between cast(d.checkIn as date) and cast(d.checkOut as date)) or (cast(:checkOut as date) between cast(d.checkIn as date) and cast(d.checkOut as date)) " +
+            "(select d.phong.id from DatPhong d where (d.trangThai = 1 or d.trangThai = 2 or d.trangThai = 5) and ((cast(:checkIn as date) between cast(d.checkIn as date) and cast(d.checkOut as date)) or (cast(:checkOut as date) between cast(d.checkIn as date) and cast(d.checkOut as date)) " +
             "or (cast(d.checkIn as date) between cast(:checkIn as date) and cast(:checkOut as date)) or (cast(d.checkOut as date) between cast(:checkIn as date) and cast(:checkOut as date)) or cast(:checkIn as date) = cast(d.checkIn as date) or" +
             " cast(:checkOut as date) = cast(d.checkOut as date)))")
     Page<Phong> getPhongByUpperPrice(Pageable pageable, BigDecimal giaPhong, Long id, LocalDateTime checkIn, LocalDateTime checkOut);
@@ -61,7 +61,7 @@ public interface DatPhongRepository extends JpaRepository<DatPhong, Long> {
             "from DatPhong d join d.khachHang u where d.id= :id")
     List<DatPhongResponse> getDatPhong(Long id);
 
-    @Query("select p from DatPhong p where p.hoaDon.id = :id and (p.trangThai = 1 or p.trangThai = 2 or p.trangThai = 3)")
+    @Query("select p from DatPhong p where p.hoaDon.id = :id and (p.trangThai = 1 or p.trangThai = 2 or p.trangThai = 3 or p.trangThai = 5)")
     List<DatPhong> getDatPhongByHoaDon(Long id);
 
     @Transactional
@@ -89,22 +89,41 @@ public interface DatPhongRepository extends JpaRepository<DatPhong, Long> {
 
     @Query("select new be.bds.bdsbes.payload.DatPhongMapping(p.id, d.ma, k.id, k.ma, k.hoTen, k.sdt, " +
             "d.ngayDat, d.checkIn, d.checkOut, d.soNguoi, d.ghiChu, d.trangThai, p.ma, d.tongGia, d.id, p.loaiPhong.tenLoaiPhong, p.loaiPhong.giaTheoNgay, ctp.tang, h.id, h.ma, k.cccd, k.ngaySinh" +
-            ", h.ngayTao, h.ngayThanhToan, h.tongTien, h.trangThai)" +
-            " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id order by p.ma asc")
+            ", h.ngayTao, h.ngayThanhToan, h.tongTien, h.trangThai, h.tienCoc, h.thoiGianCoc, h.tienPhong, h.tienDichVu, h.tienPhat, h.tienTichDiem, h.tienThanhToan, d.thoiGianCheckOut, tt.hoTen, tt.sdt)" +
+            " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id left join ThongTinNhanPhong tt on d.id = tt.idDatPhong.id order by p.ma asc")
     List<DatPhongMapping> getListDatPhong();
 
     @Query("select new be.bds.bdsbes.payload.DatPhongMapping(p.id, d.ma, k.id, k.ma, k.hoTen, k.sdt, " +
             "d.ngayDat, d.checkIn, d.checkOut, d.soNguoi, d.ghiChu, d.trangThai, p.ma, d.tongGia, d.id, p.loaiPhong.tenLoaiPhong, p.loaiPhong.giaTheoNgay, ctp.tang, h.id, h.ma, k.cccd, k.ngaySinh" +
-            ", h.ngayTao, h.ngayThanhToan, h.tongTien, h.trangThai)" +
-            " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id where d.id = :id")
+            ", h.ngayTao, h.ngayThanhToan, h.tongTien, h.trangThai, h.tienCoc, h.thoiGianCoc, h.tienPhong, h.tienDichVu, h.tienPhat, h.tienTichDiem, h.tienThanhToan, d.thoiGianCheckOut, tt.hoTen, tt.sdt)" +
+            " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id left join ThongTinNhanPhong tt on d.id = tt.idDatPhong.id where d.id = :id")
     DatPhongMapping getPhongById(Long id);
 
     @Query("select new be.bds.bdsbes.payload.DatPhongMapping(p.id, d.ma, k.id, k.ma, k.hoTen, k.sdt, " +
             "d.ngayDat, d.checkIn, d.checkOut, d.soNguoi, d.ghiChu, d.trangThai, p.ma, d.tongGia, d.id, p.loaiPhong.tenLoaiPhong, p.loaiPhong.giaTheoNgay, ctp.tang, h.id, h.ma, k.cccd, k.ngaySinh" +
-            ", h.ngayTao, h.ngayThanhToan, h.tongTien, h.trangThai)" +
-            " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id" +
+            ", h.ngayTao, h.ngayThanhToan, h.tongTien, h.trangThai, h.tienCoc, h.thoiGianCoc, h.tienPhong, h.tienDichVu, h.tienPhat, h.tienTichDiem, h.tienThanhToan, d.thoiGianCheckOut, tt.hoTen, tt.sdt)" +
+            " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id left join ThongTinNhanPhong tt on d.id = tt.idDatPhong.id" +
             " where d.phong.id = :id and " +
             "((cast(d.checkIn as date) >= cast(:checkIn as date) and cast(d.checkOut as date) <= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkOut as date)) or (cast(d.checkIn as date) <= cast(:checkIn as date) and cast(d.checkOut as date) >= cast(:checkIn as date)) or " +
             " (cast(d.checkIn as date) <= cast(:checkOut as date) and cast(d.checkOut as date) >= cast(:checkOut as date)))")
     List<DatPhongMapping> getListDatPhongByDate(Long id, LocalDate checkIn, LocalDate checkOut);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE DatPhong d SET d.phong.id = :idPhong WHERE d.id = :id")
+    Integer doiPhongById(Long idPhong, Long id);
+
+    @Query("select new be.bds.bdsbes.payload.DatPhongMapping(p.id, d.ma, k.id, k.ma, k.hoTen, k.sdt, " +
+            "d.ngayDat, d.checkIn, d.checkOut, d.soNguoi, d.ghiChu, d.trangThai, p.ma, d.tongGia, d.id, p.loaiPhong.tenLoaiPhong, p.loaiPhong.giaTheoNgay, ctp.tang, h.id, h.ma, k.cccd, k.ngaySinh" +
+            ", h.ngayTao, h.ngayThanhToan, h.tongTien, h.trangThai, h.tienCoc, h.thoiGianCoc, h.tienPhong, h.tienDichVu, h.tienPhat, h.tienTichDiem, h.tienThanhToan, d.thoiGianCheckOut, tt.hoTen, tt.sdt)" +
+            " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id " +
+            "left join ThongTinNhanPhong tt on d.id = tt.idDatPhong.id where cast(d.checkOut as date) = cast(:checkOut as date) and (d.trangThai = 2 or d.trangThai = 5) order by p.ma asc")
+    List<DatPhongMapping> getListCheckOutToDay(LocalDate checkOut);
+
+    @Query("select new be.bds.bdsbes.payload.DatPhongMapping(p.id, d.ma, k.id, k.ma, k.hoTen, k.sdt, " +
+            "d.ngayDat, d.checkIn, d.checkOut, d.soNguoi, d.ghiChu, d.trangThai, p.ma, d.tongGia, d.id, p.loaiPhong.tenLoaiPhong, p.loaiPhong.giaTheoNgay, ctp.tang, h.id, h.ma, k.cccd, k.ngaySinh" +
+            ", h.ngayTao, h.ngayThanhToan, h.tongTien, h.trangThai, h.tienCoc, h.thoiGianCoc, h.tienPhong, h.tienDichVu, h.tienPhat, h.tienTichDiem, h.tienThanhToan, d.thoiGianCheckOut, tt.hoTen, tt.sdt)" +
+            " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id " +
+            "left join ThongTinNhanPhong tt on d.id = tt.idDatPhong.id where cast(d.checkOut as date) = cast(:checkIn as date) and (d.trangThai <> 3 or d.trangThai <> 0) and p.id = :id")
+    DatPhongMapping getRoomCheckInToDay(LocalDate checkIn, Long id);
 }

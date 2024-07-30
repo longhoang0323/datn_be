@@ -230,9 +230,23 @@ public class HoaDonController {
     }
 
     @PostMapping("update-tien-coc")
-    public ResponseEntity<?> updateTienCoc(@RequestParam(value = "id") Long id, @RequestBody String ghiChu) {
+    public ResponseEntity<?> updateTienCoc(@RequestParam(value = "id") Long id, @RequestBody BigDecimal tienCoc) {
         return ResponseUtil.wrap(
-                this.iHoaDonService.updateGhiChubyId(ghiChu , id)
+                this.iHoaDonService.updateTienCocbyId(tienCoc, LocalDateTime.now(), id)
+        );
+    }
+
+    @PostMapping("update-tien-phat")
+    public ResponseEntity<?> updateTienPhat(@RequestParam(value = "id") Long id, @RequestBody BigDecimal tienPhat) {
+        return ResponseUtil.wrap(
+                this.iHoaDonService.updateTienPhatbyId(tienPhat, id)
+        );
+    }
+
+    @PostMapping("update-tien-dich-vu")
+    public ResponseEntity<?> updateTienDichVu(@RequestParam(value = "id") Long id, @RequestBody BigDecimal tienDichVu) {
+        return ResponseUtil.wrap(
+                this.iHoaDonService.updateTienDichVubyId(tienDichVu, id)
         );
     }
 }

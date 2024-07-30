@@ -23,4 +23,7 @@ public interface ChiTietDichVuRepository extends JpaRepository<ChiTietDichVu, Lo
 
     @Query("select ctdv from ChiTietDichVu ctdv where ctdv.datPhong.id = :id")
     List<ChiTietDichVu> getListByDatPhong(Long id);
+
+    @Query("select ctdv from ChiTietDichVu ctdv where ctdv.dichVu.id = :id and ctdv.datPhong.id = :iddp")
+    ChiTietDichVu getChiTietDichVuByDichVu(Long id, Long iddp);
 }

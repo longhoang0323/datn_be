@@ -56,6 +56,27 @@ public class HoaDon {
     @JoinColumn(name = "id_khach_hang")
     private KhachHang khachHang;
 
+    @Column(name = "tien_coc", precision = 18)
+    private BigDecimal tienCoc;
+
+    @Column(name = "thoi_gian_coc")
+    private LocalDateTime thoiGianCoc;
+
+    @Column(name = "tien_phong", precision = 18)
+    private BigDecimal tienPhong;
+
+    @Column(name = "tien_dich_vu", precision = 18)
+    private BigDecimal tienDichVu;
+
+    @Column(name = "tien_phat", precision = 18)
+    private BigDecimal tienPhat;
+
+    @Column(name = "tien_tich_diem", precision = 18)
+    private BigDecimal tienTichDiem;
+
+    @Column(name = "tien_thanh_toan", precision = 18)
+    private BigDecimal tienThanhToan;
+
     @OneToMany(mappedBy = "hoaDon")
     private Set<DatPhong> datPhongs = new LinkedHashSet<>();
 

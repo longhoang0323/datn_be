@@ -368,4 +368,14 @@ public class PhongController {
         LocalDate parsedCheckOut = LocalDate.parse(checkOut, formatter);
         return ResponseUtil.wrap(this.iPhongService.getCountPhongDat(id, parsedCheckIn, parsedCheckOut));
     }
+
+    @GetMapping("/list-doi-phong")
+    public ResponseEntity<?> getListDoiPhong(
+            @RequestParam(value = "tenLoaiPhong", defaultValue = "") String tenLoaiPhong,
+            @RequestParam(value = "id") Long id,
+            @RequestParam(value = "checkIn", defaultValue = "") String checkIn,
+            @RequestParam(value = "checkOut", defaultValue = "") String checkOut
+    ) {
+        return ResponseEntity.ok(this.iPhongService.getListDoiPhong(tenLoaiPhong, id, LocalDateTime.parse(checkIn), LocalDateTime.parse(checkOut)));
+    }
 }

@@ -9,6 +9,7 @@ import be.bds.bdsbes.utils.dto.PagedResponse;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IHoaDonService {
@@ -58,5 +59,9 @@ public interface IHoaDonService {
 
     PagedResponse<HoaDonResponse> findBillByCustomer(int page, int size, Long id);
 
-    Integer updateGhiChubyId(String ghiChu , Long id);
+    Integer updateTienCocbyId(BigDecimal tienCoc, LocalDateTime thoiGianCoc, Long id);
+
+    Integer updateTienPhatbyId(BigDecimal tienPhat, Long id);
+
+    Integer updateTienDichVubyId(BigDecimal tienDichVu, Long id);
 }

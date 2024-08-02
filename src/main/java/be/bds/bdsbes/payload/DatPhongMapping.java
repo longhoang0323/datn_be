@@ -66,4 +66,25 @@ public class DatPhongMapping {
     private BigDecimal tongTien;
 
     private Integer trangThaiThanhToan;
+
+    private BigDecimal tienCoc;
+
+    private LocalDateTime thoiGianCoc;
+
+    private BigDecimal tienPhong;
+
+    private BigDecimal tienDichVu;
+
+    private BigDecimal tienPhat;
+
+    private BigDecimal tienTichDiem;
+
+    private BigDecimal tienThanhToan;
+
+    private LocalDateTime thoiGianCheckOut;
+
+    private String nguoiCheckIn;
+
+    private String sdtCheckIn;
+
 }

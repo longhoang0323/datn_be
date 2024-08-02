@@ -59,4 +59,10 @@ public interface IDatPhongService {
     List<DatPhongMapping> getListMappingByHD(Long id, Long idHD);
 
     List<DatPhongMapping> getListMappingByDate(Long id, LocalDate checkIn, LocalDate checkOut);
+
+    Integer doiPhongById(Long idPhong, Long id) throws ServiceException;
+
+    List<DatPhongMapping> getListCheckOutToday(LocalDate checkOut);
+
+    DatPhongMapping getRoomCheckInToday(LocalDate checkIn, Long id);
 }

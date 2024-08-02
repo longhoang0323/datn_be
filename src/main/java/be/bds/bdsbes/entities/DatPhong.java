@@ -79,6 +79,9 @@ public class DatPhong {
     @Column(name = COLUMN_TRANGTHAI_NAME)
     private Integer trangThai;
 
+    @Column(name = "thoi_gian_check_out")
+    private LocalDateTime thoiGianCheckOut;
+
     @OneToMany(mappedBy = "datPhong")
     private Set<ChiTietDichVu> chiTietDichVus = new LinkedHashSet<>();
 

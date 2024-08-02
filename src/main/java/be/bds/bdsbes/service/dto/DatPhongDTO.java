@@ -45,4 +45,6 @@ public class DatPhongDTO implements Serializable {
 
     Long idHoaDon;
 
+    LocalDateTime thoiGianCheckOut;
+
 }

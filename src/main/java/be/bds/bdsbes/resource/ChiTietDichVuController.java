@@ -52,7 +52,8 @@ public class ChiTietDichVuController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<?> create(@RequestBody @Valid ChiTietDichVuDTO chiTietDichVuDTO){
+    public ResponseEntity<?> create(
+            @RequestBody @Valid ChiTietDichVuDTO chiTietDichVuDTO){
 //        if(result.hasErrors()){
 //            List<ObjectError> errorList = result.getAllErrors();
 //            return ResponseEntity.badRequest().body(errorList);

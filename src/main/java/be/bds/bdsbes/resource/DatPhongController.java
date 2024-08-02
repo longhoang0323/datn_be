@@ -344,4 +344,34 @@ public class DatPhongController {
         return ResponseEntity.ok(this.iDatPhongService.getListMappingByDate(id, LocalDate.parse(checkIn, formatter), LocalDate.parse(checkOut, formatter)));
     }
 
+    @PutMapping("doi-phong-by-id")
+    public ResponseEntity<?> doiPhongById(
+            @RequestBody Long idPhong,
+            @RequestParam(value = "id") Long id
+    ) {
+        try {
+            Integer response = iDatPhongService.doiPhongById(idPhong, id);
+            return ResponseUtil.wrap(response);
+        } catch (ServiceException e) {
+            log.error(this.getClass().getName(), e);
+            return ResponseUtil.generateErrorResponse(e);
+        }
+    }
+
+    @GetMapping("/list-check-out-today")
+    public ResponseEntity<?> getListCheckOutToDay(
+            @RequestParam(value = "checkOut", defaultValue = "") String checkOut
+    ) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return ResponseEntity.ok(this.iDatPhongService.getListCheckOutToday(LocalDate.parse(checkOut, formatter)));
+    }
+
+    @GetMapping("/get-room-check-in-today")
+    public ResponseEntity<?> getRoomCheckInToday(@RequestParam(name = "id") Long id,
+                                 @RequestParam(value = "checkIn", defaultValue = "") String checkIn) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return ResponseEntity.ok(this.iDatPhongService.getRoomCheckInToday(LocalDate.parse(checkIn, formatter), id));
+    }
+
+
 }

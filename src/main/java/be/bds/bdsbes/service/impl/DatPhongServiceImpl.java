@@ -585,4 +585,19 @@ public class DatPhongServiceImpl implements IDatPhongService {
         return datPhongRepository.getListDatPhongByDate(id, checkIn, checkOut);
     }
 
+    @Override
+    public Integer doiPhongById(Long idPhong, Long id) {
+        return datPhongRepository.doiPhongById(idPhong, id);
+    }
+
+    @Override
+    public List<DatPhongMapping> getListCheckOutToday(LocalDate checkOut) {
+        return datPhongRepository.getListCheckOutToDay(checkOut);
+    }
+
+    @Override
+    public DatPhongMapping getRoomCheckInToday(LocalDate checkIn, Long id) {
+        return datPhongRepository.getRoomCheckInToDay(checkIn, id);
+    }
+
 }

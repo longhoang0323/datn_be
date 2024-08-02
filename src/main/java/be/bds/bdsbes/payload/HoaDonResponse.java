@@ -32,4 +32,20 @@ public class HoaDonResponse {
 
     private String tenKhachHang;
 
+    private BigDecimal tienCoc;
+
+    private LocalDateTime thoiGianCoc;
+
+    private BigDecimal tienPhong;
+
+    private BigDecimal tienDichVu;
+
+    private BigDecimal tienPhat;
+
+    private BigDecimal tienTichDiem;
+
+    private BigDecimal tienThanhToan;
+
+
+
 }

@@ -125,11 +125,23 @@ public class HoaDonServiceImpl implements IHoaDonService {
     }
 
     @Override
-    public PagedResponse<HoaDonResponse> getHoaDonBySearch(int page, int size, String searchInput) throws ServiceException {
+    public PagedResponse<HoaDonResponse> getHoaDonBySearch(int page, int size, String searchInput, String trangThai) throws ServiceException {
         // Retrieve all entities
         Pageable pageable = PageRequest.of((page - 1), size, Sort.Direction.DESC, "id");
+        if (!trangThai.isEmpty()) {
+            Page<HoaDonResponse> entities = hoaDonRepository.getListBySearchAndTrangThai(pageable, searchInput, Integer.parseInt(trangThai));
+            List<HoaDonResponse> dtos = entities.toList();
+            return new PagedResponse<>(
+                    dtos,
+                    page,
+                    size,
+                    entities.getTotalElements(),
+                    entities.getTotalPages(),
+                    entities.isLast(),
+                    entities.getSort().toString()
+            );
+        }
         Page<HoaDonResponse> entities = hoaDonRepository.getListBySearch(pageable, searchInput);
-
         List<HoaDonResponse> dtos = entities.toList();
         return new PagedResponse<>(
                 dtos,
@@ -268,7 +280,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
     public Integer updateTrangThai(Integer trangThai, Long id) throws ServiceException {
         HoaDon hoaDon = hoaDonRepository.findById(id).get();
         if (trangThai == 0) {
-            if(hoaDon.getTrangThai() == 2){
+            if (hoaDon.getTrangThai() == 2) {
 //                this.hoaDonRepository.updateTongTienById((hoaDon.getTongTien().multiply(BigDecimal.valueOf(Double.parseDouble("95")))).divide(BigDecimal.valueOf(Double.parseDouble("100"))), id);
                 System.out.println((hoaDon.getTongTien().multiply(BigDecimal.valueOf(Double.parseDouble("95")))).divide(BigDecimal.valueOf(Double.parseDouble("100"))));
                 hoaDon.setTongTien((hoaDon.getTongTien().multiply(BigDecimal.valueOf(Double.parseDouble("95")))).divide(BigDecimal.valueOf(Double.parseDouble("100"))));
@@ -302,7 +314,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
             return hoaDonRepository.updateTrangThaiById(trangThai, id);
         }
         if (trangThai == 7) {
-            if(hoaDon.getTrangThai() == 6){
+            if (hoaDon.getTrangThai() == 6) {
                 ThongBao thongBao = new ThongBao();
                 thongBao.setNoiDung("Hóa đơn tiền cọc của bạn đã được xác nhận");
                 thongBao.setTrangThai(1);
@@ -314,7 +326,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
             this.hoaDonRepository.save(hoaDon);
             return hoaDonRepository.updateTrangThaiById(trangThai, id);
         }
-        if(trangThai == 5){
+        if (trangThai == 5) {
             hoaDon.setNgayThanhToan(LocalDateTime.now());
         }
         return hoaDonRepository.updateTrangThaiById(trangThai, id);
@@ -451,7 +463,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
     @Override
     public Integer updateTienPhatbyId(BigDecimal tienPhat, Long id) {
         HoaDon hoaDon = hoaDonRepository.findById(id).get();
-        if(hoaDon.getTienPhat() == null || String.valueOf(hoaDon.getTienPhat()).equals("0")){
+        if (hoaDon.getTienPhat() == null || String.valueOf(hoaDon.getTienPhat()).equals("0")) {
             hoaDon.setTongTien(hoaDon.getTongTien().add(tienPhat));
             this.hoaDonRepository.save(hoaDon);
             this.hoaDonRepository.updateTienPhatById(tienPhat, id);
@@ -466,7 +478,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
     @Override
     public Integer updateTienDichVubyId(BigDecimal tienDichVu, Long id) {
         HoaDon hoaDon = hoaDonRepository.findById(id).get();
-        if(hoaDon.getTienDichVu() == null || String.valueOf(hoaDon.getTienDichVu()).equals("0")){
+        if (hoaDon.getTienDichVu() == null || String.valueOf(hoaDon.getTienDichVu()).equals("0")) {
             hoaDon.setTongTien(hoaDon.getTongTien().add(tienDichVu));
             this.hoaDonRepository.save(hoaDon);
             this.hoaDonRepository.updateTienDichVuById(tienDichVu, id);
@@ -476,6 +488,23 @@ public class HoaDonServiceImpl implements IHoaDonService {
         this.hoaDonRepository.save(hoaDon);
         this.hoaDonRepository.updateTienDichVuById(hoaDon.getTienDichVu().add(tienDichVu), id);
         return 1;
+    }
+
+    @Override
+    public PagedResponse<HoaDonResponse> getListByTrangThai(int page, int size, int trangThai) throws ServiceException {
+        Pageable pageable = PageRequest.of((page - 1), size, Sort.Direction.DESC, "id");
+        Page<HoaDonResponse> entities = hoaDonRepository.getListByTrangThai(pageable, trangThai);
+
+        List<HoaDonResponse> dtos = entities.toList();
+        return new PagedResponse<>(
+                dtos,
+                page,
+                size,
+                entities.getTotalElements(),
+                entities.getTotalPages(),
+                entities.isLast(),
+                entities.getSort().toString()
+        );
     }
 
 

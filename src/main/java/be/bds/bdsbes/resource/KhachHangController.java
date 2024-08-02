@@ -91,4 +91,24 @@ public class KhachHangController {
     public ResponseEntity<?> getKHbyCCCD(@RequestParam(value = "cccd") String cccd){
         return ResponseEntity.ok(khachHangService.getKHbyCccd(cccd));
     }
+
+    @PutMapping("update-ghi-chu")
+    public ResponseEntity<?> updateGhiChu(@RequestBody String ghiChu, @RequestParam(value = "id") Long id){
+        return ResponseUtil.wrap(khachHangService.updateGhiChu(ghiChu, id));
+    }
+
+    @GetMapping("list-by-search")
+    public ResponseEntity<?> getListBySearch(
+            @RequestParam(value = "page", defaultValue = AppConstantsUtil.DEFAULT_PAGE_NUMBER) int page,
+            @RequestParam(value = "size", defaultValue = AppConstantsUtil.DEFAULT_PAGE_SIZE) int size,
+            @RequestParam(value = "inputSearch", defaultValue = "") String inputSearch) {
+        try {
+            return ResponseUtil.wrap(this.khachHangService.getListBySearch(page, size, inputSearch));
+        } catch (Exception ex) {
+            log.error(this.getClass().getName(), ex);
+            return ResponseUtil.generateErrorResponse(ex);
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

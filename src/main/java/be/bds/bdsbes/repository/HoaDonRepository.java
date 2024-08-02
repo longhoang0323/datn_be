@@ -20,16 +20,21 @@ import java.util.List;
 @Repository
 public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
 
-    @Query("select new be.bds.bdsbes.payload.HoaDonResponse(p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.id, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan) from HoaDon p inner join p.khachHang k where p.trangThai <> 5 " +
+    @Query("select new be.bds.bdsbes.payload.HoaDonResponse(p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.id, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan) from HoaDon p inner join p.khachHang k " +
             "group by k.id, p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan")
     Page<HoaDonResponse> getList(Pageable pageable);
 
-    @Query("select new be.bds.bdsbes.payload.HoaDonResponse(p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.id, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan) from HoaDon p inner join p.khachHang k where p.trangThai <> 5 and (p.ghiChu like concat('%', :searchInput, '%') or " +
-            "p.khachHang.hoTen like concat('%', :searchInput, '%'))" +
+    @Query("select new be.bds.bdsbes.payload.HoaDonResponse(p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.id, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan) from HoaDon p inner join p.khachHang k where (p.ghiChu like concat('%', :searchInput, '%') or " +
+            "p.khachHang.hoTen like concat('%', :searchInput, '%') or p.khachHang.cccd like concat('%', :searchInput, '%') or p.ma like concat('%', :searchInput, '%')) and (p.trangThai = :trangThai)" +
+            "group by k.id, p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan")
+    Page<HoaDonResponse> getListBySearchAndTrangThai(Pageable pageable, String searchInput, int trangThai);
+
+    @Query("select new be.bds.bdsbes.payload.HoaDonResponse(p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.id, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan) from HoaDon p inner join p.khachHang k where (p.ghiChu like concat('%', :searchInput, '%') or " +
+            "p.khachHang.hoTen like concat('%', :searchInput, '%') or p.khachHang.cccd like concat('%', :searchInput, '%') or p.ma like concat('%', :searchInput, '%')) " +
             "group by k.id, p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan")
     Page<HoaDonResponse> getListBySearch(Pageable pageable, String searchInput);
 
-    @Query("select h from HoaDon h join DatPhong d on h.id = d.hoaDon.id join KhachHang k on k.id = h.khachHang.id where k.hoTen = :hoTen and k.sdt = :sdt and h.trangThai <> 5")
+    @Query("select h from HoaDon h join DatPhong d on h.id = d.hoaDon.id join KhachHang k on k.id = h.khachHang.id where k.hoTen = :hoTen and k.sdt = :sdt")
     Page<HoaDon> getListByCustumer(Pageable pageable, String hoTen, String sdt);
 
     @Query("select new be.bds.bdsbes.payload.HoaDonResponse(p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.id, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan) from HoaDon p inner join p.khachHang k " +
@@ -100,4 +105,9 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     @Modifying
     @Query("UPDATE HoaDon h SET h.tienDichVu = :tienDichVu WHERE h.id = :id")
     Integer updateTienDichVuById(BigDecimal tienDichVu, Long id);
+
+    @Query("select new be.bds.bdsbes.payload.HoaDonResponse(p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.id, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan) from HoaDon p inner join p.khachHang k where p.trangThai = :trangThai " +
+            "group by k.id, p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan")
+    Page<HoaDonResponse> getListByTrangThai(Pageable pageable, int trangThai);
+
 }

@@ -4,6 +4,7 @@ import be.bds.bdsbes.domain.User;
 import be.bds.bdsbes.entities.KhachHang;
 import be.bds.bdsbes.entities.TheThanhVien;
 import be.bds.bdsbes.exception.ServiceException;
+import be.bds.bdsbes.payload.HoaDonResponse;
 import be.bds.bdsbes.payload.KhachHangResponse1;
 import be.bds.bdsbes.repository.KhachHangRepository;
 import be.bds.bdsbes.repository.UserRepository;
@@ -184,6 +185,28 @@ public class KhachHangServiceImpl implements IKhachHangService {
         } else {
             return khachHangResponse1;
         }
+    }
+
+    @Override
+    public Integer updateGhiChu(String ghiChu, Long id) {
+        this.khachHangRepository.updateGhiChu(ghiChu, id);
+        return 1;
+    }
+
+    @Override
+    public PagedResponse<KhachHangResponse1> getListBySearch(int page, int size, String inputSearch) throws ServiceException {
+        Pageable pageable = PageRequest.of((page - 1), size, Sort.Direction.DESC, "id");
+        Page<KhachHangResponse1> entities = khachHangRepository.getListBySearch(pageable, inputSearch);
+        List<KhachHangResponse1> dtos = entities.toList();
+        return new PagedResponse<>(
+                dtos,
+                page,
+                size,
+                entities.getTotalElements(),
+                entities.getTotalPages(),
+                entities.isLast(),
+                entities.getSort().toString()
+        );
     }
 
 

@@ -9,6 +9,7 @@ import be.bds.bdsbes.service.dto.response.DatPhongResponse;
 import be.bds.bdsbes.utils.dto.PagedResponse;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IChiTietDichVuService {
@@ -27,4 +28,12 @@ public interface IChiTietDichVuService {
     PagedResponse<ChiTietDichVuResponse1> getAllByDatPhong(int page, int size, Long id) throws ServiceException;
 
     Boolean delete(Long id);
+
+    int getCount(LocalDate checkIn, LocalDate checkOut);
+
+    int getCountByToDay(int day, int month, int year);
+
+    int getCountByMonth(int month, int year);
+
+    int getCountByYear(int year);
 }

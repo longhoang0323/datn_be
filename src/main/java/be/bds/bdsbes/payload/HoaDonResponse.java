@@ -46,6 +46,6 @@ public class HoaDonResponse {
 
     private BigDecimal tienThanhToan;
 
-
+    private BigDecimal tienHoanLai;
 
 }

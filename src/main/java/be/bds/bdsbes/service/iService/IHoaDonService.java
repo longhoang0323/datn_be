@@ -16,7 +16,7 @@ public interface IHoaDonService {
 
     PagedResponse<HoaDonResponse> getHoaDon(int page, int size) throws ServiceException;
 
-    PagedResponse<HoaDonResponse> getHoaDonBySearch(int page, int size, String searchInput) throws ServiceException;
+    PagedResponse<HoaDonResponse> getHoaDonBySearch(int page, int size, String searchInput, String trangThai) throws ServiceException;
 
 
     PagedResponse<HoaDonResponse> getHoaDonByCustomer(int page, int size, String hoTen, String sdt) throws ServiceException;
@@ -64,4 +64,10 @@ public interface IHoaDonService {
     Integer updateTienPhatbyId(BigDecimal tienPhat, Long id);
 
     Integer updateTienDichVubyId(BigDecimal tienDichVu, Long id);
+
+    PagedResponse<HoaDonResponse> getListByTrangThai(int page, int size, int trangThai) throws ServiceException;
+
+    Integer updateTienTichDiembyId(BigDecimal tienTichDiem, Long id);
+
+    Integer updateTienHoanLaibyId(BigDecimal tienHoanLai, Long id);
 }

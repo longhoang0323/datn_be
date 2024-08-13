@@ -146,9 +146,10 @@ public class HoaDonController {
     public ResponseEntity<?> getListbySearch(
             @RequestParam(value = "page", defaultValue = AppConstantsUtil.DEFAULT_PAGE_NUMBER) int page,
             @RequestParam(value = "size", defaultValue = AppConstantsUtil.DEFAULT_PAGE_SIZE) int size,
-            @RequestParam(value = "input", defaultValue = "") String searchInput) {
+            @RequestParam(value = "input", defaultValue = "") String searchInput,
+            @RequestParam(value = "trangThai", defaultValue = "") String trangThai) {
         try {
-            return ResponseUtil.wrap(this.iHoaDonService.getHoaDonBySearch(page, size, searchInput));
+            return ResponseUtil.wrap(this.iHoaDonService.getHoaDonBySearch(page, size, searchInput, trangThai));
         } catch (Exception ex) {
             log.error(this.getClass().getName(), ex);
             return ResponseUtil.generateErrorResponse(ex);
@@ -247,6 +248,36 @@ public class HoaDonController {
     public ResponseEntity<?> updateTienDichVu(@RequestParam(value = "id") Long id, @RequestBody BigDecimal tienDichVu) {
         return ResponseUtil.wrap(
                 this.iHoaDonService.updateTienDichVubyId(tienDichVu, id)
+        );
+    }
+
+    @PostMapping("update-tien-tich-diem")
+    public ResponseEntity<?> updateTienTichDiem(@RequestParam(value = "id") Long id, @RequestBody BigDecimal tienTichDiem) {
+        return ResponseUtil.wrap(
+                this.iHoaDonService.updateTienTichDiembyId(tienTichDiem, id)
+        );
+    }
+
+    @GetMapping("list-by-trang-thai")
+    public ResponseEntity<?> getListbyTrangThai(
+            @RequestParam(value = "page", defaultValue = AppConstantsUtil.DEFAULT_PAGE_NUMBER) int page,
+            @RequestParam(value = "size", defaultValue = AppConstantsUtil.DEFAULT_PAGE_SIZE) int size,
+            @RequestParam(value = "input", defaultValue = "") String searchInput,
+            @RequestParam(value = "trangThai", defaultValue = "") int trangThai) {
+        try {
+            return ResponseUtil.wrap(this.iHoaDonService.getListByTrangThai(page, size, trangThai));
+        } catch (Exception ex) {
+            log.error(this.getClass().getName(), ex);
+            return ResponseUtil.generateErrorResponse(ex);
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("update-tien-hoan-lai")
+    public ResponseEntity<?> updateTienHoanLai(@RequestParam(value = "id") Long id, @RequestBody BigDecimal tienHoanLai) {
+        return ResponseUtil.wrap(
+                this.iHoaDonService.updateTienHoanLaibyId(tienHoanLai, id)
         );
     }
 }

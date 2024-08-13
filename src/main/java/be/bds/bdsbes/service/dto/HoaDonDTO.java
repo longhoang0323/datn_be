@@ -42,6 +42,8 @@ public class HoaDonDTO {
 
     private BigDecimal tienThanhToan;
 
+    private BigDecimal tienHoanLai;
+
 
     public HoaDon dto(HoaDon hoaDon){
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -55,6 +57,7 @@ public class HoaDonDTO {
         hoaDon.setThoiGianCoc(this.getThoiGianCoc());
         hoaDon.setTienPhong(this.getTienPhong());
         hoaDon.setTienTichDiem(this.getTienTichDiem());
+        hoaDon.setTienHoanLai(this.getTienHoanLai());
         return hoaDon;
     }
 }

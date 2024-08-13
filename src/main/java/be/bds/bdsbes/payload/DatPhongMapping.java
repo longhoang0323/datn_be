@@ -81,10 +81,14 @@ public class DatPhongMapping {
 
     private BigDecimal tienThanhToan;
 
+    private BigDecimal tienHoanLai;
+
     private LocalDateTime thoiGianCheckOut;
 
     private String nguoiCheckIn;
 
     private String sdtCheckIn;
+
+    private String giamGia;
 
 }

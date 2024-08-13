@@ -31,6 +31,8 @@ public class KhachHangResponse1 {
 
     private String cccd;
 
+    private String ghiChu;
+
     private String rank;
 
     private BigDecimal giamGia;

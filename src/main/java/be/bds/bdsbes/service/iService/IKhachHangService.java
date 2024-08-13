@@ -32,4 +32,10 @@ public interface IKhachHangService {
     Boolean updateKH(KhachHangDTO khachHangDTO, Long id);
 
     KhachHangResponse1 getKHbyCccd(String cccd);
+
+    Integer updateGhiChu(String ghiChu, Long id);
+
+    Integer updateGhiChu2(String ghiChu, Long id);
+
+    PagedResponse<KhachHangResponse1> getListBySearch(int page, int size, String inputSearch) throws ServiceException;
 }

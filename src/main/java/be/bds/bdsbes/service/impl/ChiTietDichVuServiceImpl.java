@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -157,5 +158,25 @@ public class ChiTietDichVuServiceImpl implements IChiTietDichVuService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public int getCount(LocalDate checkIn, LocalDate checkOut) {
+        return chiTietDichVuRepository.getCount(checkIn, checkOut);
+    }
+
+    @Override
+    public int getCountByToDay(int day, int month, int year) {
+        return chiTietDichVuRepository.getCountByToDay(day, month, year);
+    }
+
+    @Override
+    public int getCountByMonth(int month, int year) {
+        return chiTietDichVuRepository.getCountByMonth(month, year);
+    }
+
+    @Override
+    public int getCountByYear(int year) {
+        return chiTietDichVuRepository.getCountByYear(year);
     }
 }

@@ -77,6 +77,9 @@ public class HoaDon {
     @Column(name = "tien_thanh_toan", precision = 18)
     private BigDecimal tienThanhToan;
 
+    @Column(name = "tien_hoan_lai", precision = 18)
+    private BigDecimal tienHoanLai;
+
     @OneToMany(mappedBy = "hoaDon")
     private Set<DatPhong> datPhongs = new LinkedHashSet<>();
 

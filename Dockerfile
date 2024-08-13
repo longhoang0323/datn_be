@@ -9,7 +9,7 @@ RUN mvn package
 
 FROM adoptopenjdk/openjdk8:alpine-jre
 
-ARG JAR_FILE=tools.be-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=bdsbe-0.0.1-SNAPSHOT.jar
 
 WORKDIR /opt/app
 

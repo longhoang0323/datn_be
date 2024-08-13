@@ -15,4 +15,4 @@ WORKDIR /opt/app
 
 COPY --from=maven /usr/src/app/target/${JAR_FILE} /opt/app/
 
-ENTRYPOINT ["java","-jar","tools.be-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","bdsbe-0.0.1-SNAPSHOT.jar"]

@@ -3,6 +3,7 @@ package be.bds.bdsbes.resource;
 import be.bds.bdsbes.exception.ServiceException;
 import be.bds.bdsbes.repository.DatPhongRepository;
 import be.bds.bdsbes.service.dto.KhachHangDTO;
+import be.bds.bdsbes.service.dto.MonthlyBookingDTO;
 import be.bds.bdsbes.service.iService.IDatPhongService;
 import be.bds.bdsbes.service.dto.DatPhongDTO;
 import be.bds.bdsbes.service.impl.PdfGenerator;
@@ -294,6 +295,21 @@ public class DatPhongController {
         return ResponseUtil.wrap(this.iDatPhongService.getSoPhongDaDat(parsedCheckIn, parsedCheckOut));
     }
 
+    @GetMapping("so-phong-da-dat-by-day")
+    public ResponseEntity<?> soPhongDaDatByDay(@RequestParam(value = "year") int year,@RequestParam(value = "month") int month,@RequestParam(value = "day") int day) {
+        return ResponseUtil.wrap(this.iDatPhongService.getSoPhongDaDatByToDay(day, month, year));
+    }
+
+    @GetMapping("so-phong-da-dat-by-month")
+    public ResponseEntity<?> soPhongDaDatByMonth(@RequestParam(value = "year") int year,@RequestParam(value = "month") int month) {
+        return ResponseUtil.wrap(this.iDatPhongService.getSoPhongDaDatByMonth(month, year));
+    }
+
+    @GetMapping("so-phong-da-dat-by-year")
+    public ResponseEntity<?> soPhongDaDatByYear(@RequestParam(value = "year") int year) {
+        return ResponseUtil.wrap(this.iDatPhongService.getSoPhongDaDatByYear(year));
+    }
+
     @PostMapping("dat-phong-tai-quay")
     public ResponseEntity<?> datPhongTaiQuay(@Valid @RequestBody DatPhongDTO datPhongDTO) {
         try {
@@ -373,5 +389,10 @@ public class DatPhongController {
         return ResponseEntity.ok(this.iDatPhongService.getRoomCheckInToday(LocalDate.parse(checkIn, formatter), id));
     }
 
+    @GetMapping("/monthly-bookings")
+    public ResponseEntity<?> getMonthlyBookings() {
+        List<MonthlyBookingDTO> dtoList = iDatPhongService.getMonthlyBookings();
+        return ResponseEntity.ok(dtoList);
+    }
 
 }

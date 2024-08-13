@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -26,4 +28,16 @@ public interface ChiTietDichVuRepository extends JpaRepository<ChiTietDichVu, Lo
 
     @Query("select ctdv from ChiTietDichVu ctdv where ctdv.dichVu.id = :id and ctdv.datPhong.id = :iddp")
     ChiTietDichVu getChiTietDichVuByDichVu(Long id, Long iddp);
+
+    @Query("select count (ctdv.id) from ChiTietDichVu ctdv where (cast(ctdv.thoiGianDat as date) between cast(:checkIn as date) and cast(:checkOut as date) )")
+    int getCount(LocalDate checkIn, LocalDate checkOut);
+
+    @Query("select count (ctdv.id) from ChiTietDichVu ctdv where (day(ctdv.thoiGianDat) = :day and month(ctdv.thoiGianDat) = :month and year(ctdv.thoiGianDat) = :year)")
+    int getCountByToDay(int day, int month, int year);
+
+    @Query("select count (ctdv.id) from ChiTietDichVu ctdv where (month(ctdv.thoiGianDat) = :month and year(ctdv.thoiGianDat) = :year)")
+    int getCountByMonth(int month, int year);
+
+    @Query("select count (ctdv.id) from ChiTietDichVu ctdv where (year(ctdv.thoiGianDat) = :year)")
+    int getCountByYear(int year);
 }

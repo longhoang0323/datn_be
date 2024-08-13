@@ -8,6 +8,7 @@ import be.bds.bdsbes.payload.DatPhongMapping;
 import be.bds.bdsbes.payload.PhongResponse1;
 import be.bds.bdsbes.repository.*;
 import be.bds.bdsbes.service.dto.KhachHangDTO;
+import be.bds.bdsbes.service.dto.MonthlyBookingDTO;
 import be.bds.bdsbes.service.iService.IDatPhongService;
 import be.bds.bdsbes.service.dto.DatPhongDTO;
 import be.bds.bdsbes.service.dto.response.DatPhongResponse;
@@ -300,6 +301,11 @@ public class DatPhongServiceImpl implements IDatPhongService {
 
     @Override
     public Integer updateStatus(Integer trangThai, Long id) throws ServiceException {
+        DatPhong datPhong = datPhongRepository.findById(id).get();
+        if(trangThai == 3){
+            datPhong.setThoiGianCheckOut(LocalDateTime.now());
+            datPhongRepository.save(datPhong);
+        }
         return datPhongRepository.updateTrangThaiById(trangThai, id);
     }
 
@@ -542,6 +548,21 @@ public class DatPhongServiceImpl implements IDatPhongService {
     }
 
     @Override
+    public int getSoPhongDaDatByToDay(int day, int month, int year) {
+        return datPhongRepository.getSoPhongDaDatByToDay(day, month, year);
+    }
+
+    @Override
+    public int getSoPhongDaDatByMonth(int month, int year) {
+        return datPhongRepository.getSoPhongDaDatByMonth(month, year);
+    }
+
+    @Override
+    public int getSoPhongDaDatByYear(int year) {
+        return datPhongRepository.getSoPhongDaDatByYear(year);
+    }
+
+    @Override
     public PagedResponse<DatPhongResponse> getDatPhongByKH(int page, int size, Long id) throws ServiceException {
         Pageable pageable = PageRequest.of((page - 1), size, Sort.Direction.ASC, "id");
         Page<DatPhong> entities = datPhongRepository.getPageDatPhongByKH(pageable, id);
@@ -598,6 +619,11 @@ public class DatPhongServiceImpl implements IDatPhongService {
     @Override
     public DatPhongMapping getRoomCheckInToday(LocalDate checkIn, Long id) {
         return datPhongRepository.getRoomCheckInToDay(checkIn, id);
+    }
+
+    @Override
+    public List<MonthlyBookingDTO> getMonthlyBookings() {
+        return datPhongRepository.findMonthlyBookings();
     }
 
 }

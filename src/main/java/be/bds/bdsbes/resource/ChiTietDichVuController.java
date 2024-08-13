@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 @Slf4j
@@ -102,5 +104,28 @@ public class ChiTietDichVuController {
     @DeleteMapping("delete")
     public ResponseEntity<?> delete(@RequestParam(value = "id") Long id){
         return ResponseUtil.wrap(iChiTietDichVuService.delete(id));
+    }
+
+    @GetMapping("get-count")
+    public ResponseEntity<?> getCount(@RequestParam(value = "checkIn") String checkIn, @RequestParam(value = "checkOut") String checkOut) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate parsedCheckIn = LocalDate.parse(checkIn, formatter);
+        LocalDate parsedCheckOut = LocalDate.parse(checkOut, formatter);
+        return ResponseUtil.wrap(this.iChiTietDichVuService.getCount(parsedCheckIn, parsedCheckOut));
+    }
+
+    @GetMapping("get-count-by-day")
+    public ResponseEntity<?> getCountByDay(@RequestParam(value = "year") int year,@RequestParam(value = "month") int month,@RequestParam(value = "day") int day) {
+        return ResponseUtil.wrap(this.iChiTietDichVuService.getCountByToDay(day, month, year));
+    }
+
+    @GetMapping("get-count-by-month")
+    public ResponseEntity<?> getCountByMonth(@RequestParam(value = "year") int year,@RequestParam(value = "month") int month) {
+        return ResponseUtil.wrap(this.iChiTietDichVuService.getCountByMonth(month, year));
+    }
+
+    @GetMapping("get-count-by-year")
+    public ResponseEntity<?> getCountByYear(@RequestParam(value = "year") int year) {
+        return ResponseUtil.wrap(this.iChiTietDichVuService.getCountByYear(year));
     }
 }

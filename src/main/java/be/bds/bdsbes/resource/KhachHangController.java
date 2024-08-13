@@ -111,4 +111,9 @@ public class KhachHangController {
             throw new RuntimeException(e);
         }
     }
+
+    @PutMapping("tinh-lai-giam-gia")
+    public ResponseEntity<?> updateGhiChu2(@RequestBody String ghiChu, @RequestParam(value = "id") Long id){
+        return ResponseUtil.wrap(khachHangService.updateGhiChu2(ghiChu, id));
+    }
 }

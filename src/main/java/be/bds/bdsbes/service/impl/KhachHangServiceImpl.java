@@ -2,6 +2,7 @@ package be.bds.bdsbes.service.impl;
 
 import be.bds.bdsbes.domain.User;
 import be.bds.bdsbes.entities.KhachHang;
+import be.bds.bdsbes.entities.Sale;
 import be.bds.bdsbes.entities.TheThanhVien;
 import be.bds.bdsbes.exception.ServiceException;
 import be.bds.bdsbes.payload.HoaDonResponse;
@@ -24,8 +25,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +37,7 @@ import java.util.Random;
 
 @Slf4j
 @Service("khachHangServiceImpl")
+@EnableScheduling
 public class KhachHangServiceImpl implements IKhachHangService {
 
     @Autowired
@@ -189,6 +194,17 @@ public class KhachHangServiceImpl implements IKhachHangService {
 
     @Override
     public Integer updateGhiChu(String ghiChu, Long id) {
+        KhachHang khachHang = khachHangRepository.findById(id).get();
+        if(!khachHang.getGhiChu().isEmpty() || Integer.parseInt(khachHang.getGhiChu()) > 0){
+            this.khachHangRepository.updateGhiChu(String.valueOf((Integer.parseInt(khachHang.getGhiChu()) + Integer.parseInt(ghiChu))), id);
+            return 1;
+        }
+        this.khachHangRepository.updateGhiChu(ghiChu, id);
+        return 1;
+    }
+
+    @Override
+    public Integer updateGhiChu2(String ghiChu, Long id) {
         this.khachHangRepository.updateGhiChu(ghiChu, id);
         return 1;
     }
@@ -209,5 +225,14 @@ public class KhachHangServiceImpl implements IKhachHangService {
         );
     }
 
-
+    @Scheduled(cron = "0 0 0 1 * ?")
+    public void expireVouchers() {
+          List<KhachHang> list = khachHangRepository.findAll();
+        for (KhachHang khachHang : list) {
+            if(khachHang.getGhiChu() != null){
+                khachHang.setGhiChu(String.valueOf(Integer.parseInt(khachHang.getGhiChu())*9/10));
+            }
+        }
+        khachHangRepository.saveAll(list);
+    }
 }

@@ -130,7 +130,7 @@ public class PdfGenerator {
 
 
         String formattedTongTien = formatter.format(hoaDon.getTongTien());
-        Paragraph paragraphTongTien = new Paragraph("\nTong thanh toan: " + formattedTongTien + "VND", fontInfor);
+        Paragraph paragraphTongTien = new Paragraph("\nTong thanh toan: " + formattedTongTien + "VND", fontDate);
         paragraphTongTien.setAlignment(Paragraph.ALIGN_LEFT);
         Paragraph paragraph9 = new Paragraph("\n", fontInfor);
         paragraph9.setAlignment(Paragraph.ALIGN_LEFT);
@@ -169,6 +169,26 @@ public class PdfGenerator {
             document.add(paragraphTienPhong);
         }
         document.add(paragraphLine);
+        if(hoaDon.getTienPhong() != null){
+            Paragraph paragraphTongTienPhong = new Paragraph("\nTien phong: " + hoaDon.getTienPhong() + "VND", fontDate);
+            paragraphTongTienPhong.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(paragraphTongTienPhong);
+        }
+        if(hoaDon.getTienDichVu() != null){
+            Paragraph paragraphTienDichVu = new Paragraph("\nTien dich vu: " + formatter.format(hoaDon.getTienDichVu()) + "VND", fontDate);
+            paragraphTienDichVu.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(paragraphTienDichVu);
+        }
+        if(hoaDon.getTienPhat() != null){
+            Paragraph paragraphTienPhat = new Paragraph("\nTien phat: " + formatter.format(hoaDon.getTienPhat()) + "VND", fontDate);
+            paragraphTienPhat.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(paragraphTienPhat);
+        }
+        if(hoaDon.getTienTichDiem() != null){
+            Paragraph paragraphGiamGia = new Paragraph("\nGiam gia: " + formatter.format(hoaDon.getTienTichDiem()) + "VND", fontDate);
+            paragraphGiamGia.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(paragraphGiamGia);
+        }
         document.add(paragraphTongTien);
         if(hoaDon.getTienCoc() != null){
             String formattedTienCoc = formatter.format(hoaDon.getTienCoc());

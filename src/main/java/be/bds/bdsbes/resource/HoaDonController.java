@@ -251,6 +251,13 @@ public class HoaDonController {
         );
     }
 
+    @PostMapping("update-tien-tich-diem")
+    public ResponseEntity<?> updateTienTichDiem(@RequestParam(value = "id") Long id, @RequestBody BigDecimal tienTichDiem) {
+        return ResponseUtil.wrap(
+                this.iHoaDonService.updateTienTichDiembyId(tienTichDiem, id)
+        );
+    }
+
     @GetMapping("list-by-trang-thai")
     public ResponseEntity<?> getListbyTrangThai(
             @RequestParam(value = "page", defaultValue = AppConstantsUtil.DEFAULT_PAGE_NUMBER) int page,
@@ -265,5 +272,12 @@ public class HoaDonController {
         } catch (ServiceException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @PostMapping("update-tien-hoan-lai")
+    public ResponseEntity<?> updateTienHoanLai(@RequestParam(value = "id") Long id, @RequestBody BigDecimal tienHoanLai) {
+        return ResponseUtil.wrap(
+                this.iHoaDonService.updateTienHoanLaibyId(tienHoanLai, id)
+        );
     }
 }

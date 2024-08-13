@@ -66,4 +66,8 @@ public interface IHoaDonService {
     Integer updateTienDichVubyId(BigDecimal tienDichVu, Long id);
 
     PagedResponse<HoaDonResponse> getListByTrangThai(int page, int size, int trangThai) throws ServiceException;
+
+    Integer updateTienTichDiembyId(BigDecimal tienTichDiem, Long id);
+
+    Integer updateTienHoanLaibyId(BigDecimal tienHoanLai, Long id);
 }

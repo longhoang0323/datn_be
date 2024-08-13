@@ -258,13 +258,16 @@ public class HoaDonServiceImpl implements IHoaDonService {
 
     @Override
     public Boolean updateTongTien(HoaDonDTO hoaDonDTO) {
-        Long idKH = khachHangRepository.findByIdKhachHang(hoaDonDTO.getIdKhachHang());
+//        Long idKH = khachHangRepository.findByIdKhachHang(hoaDonDTO.getIdKhachHang());
         HoaDonResponse hoaDonResponse = hoaDonRepository.getHoaDon(hoaDonDTO.getIdKhachHang(), LocalDate.now());
         if (hoaDonResponse != null) {
             HoaDon hoaDon = hoaDonRepository.findById(hoaDonResponse.getId()).get();
             BigDecimal tongTienCu = hoaDon.getTongTien();
             BigDecimal tongTienMoi = tongTienCu.subtract(hoaDonDTO.getTongTien());
+            BigDecimal tienPhongCu = hoaDon.getTienPhong();
+            BigDecimal tienPhongMoi = tienPhongCu.subtract(hoaDonDTO.getTienPhong());
             hoaDon.setTongTien(tongTienMoi);
+            hoaDon.setTienPhong(tienPhongMoi);
             hoaDonRepository.save(hoaDon);
             return true;
         }
@@ -284,6 +287,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
 //                this.hoaDonRepository.updateTongTienById((hoaDon.getTongTien().multiply(BigDecimal.valueOf(Double.parseDouble("95")))).divide(BigDecimal.valueOf(Double.parseDouble("100"))), id);
                 System.out.println((hoaDon.getTongTien().multiply(BigDecimal.valueOf(Double.parseDouble("95")))).divide(BigDecimal.valueOf(Double.parseDouble("100"))));
                 hoaDon.setTongTien((hoaDon.getTongTien().multiply(BigDecimal.valueOf(Double.parseDouble("95")))).divide(BigDecimal.valueOf(Double.parseDouble("100"))));
+                hoaDon.setTienPhong((hoaDon.getTienPhong().multiply(BigDecimal.valueOf(Double.parseDouble("95")))).divide(BigDecimal.valueOf(Double.parseDouble("100"))));
                 ThongBao thongBao = new ThongBao();
                 thongBao.setNoiDung("Hóa đơn của bạn đã được xác nhận");
                 thongBao.setTrangThai(1);
@@ -327,6 +331,12 @@ public class HoaDonServiceImpl implements IHoaDonService {
             return hoaDonRepository.updateTrangThaiById(trangThai, id);
         }
         if (trangThai == 5) {
+            if(hoaDon.getTienHoanLai() != null){
+                hoaDon.setTienThanhToan(hoaDon.getTongTien().subtract(hoaDon.getTienHoanLai()));
+            }
+            if(hoaDon.getTienHoanLai() == null){
+                hoaDon.setTienThanhToan(hoaDon.getTongTien());
+            }
             hoaDon.setNgayThanhToan(LocalDateTime.now());
         }
         return hoaDonRepository.updateTrangThaiById(trangThai, id);
@@ -507,5 +517,17 @@ public class HoaDonServiceImpl implements IHoaDonService {
         );
     }
 
+    @Override
+    public Integer updateTienTichDiembyId(BigDecimal tienTichDiem, Long id) {
+        HoaDon hoaDon = hoaDonRepository.findById(id).get();
+        this.hoaDonRepository.updateTienTichDiemById(tienTichDiem, LocalDateTime.now(), id);
+        return 1;
+    }
+
+    @Override
+    public Integer updateTienHoanLaibyId(BigDecimal tienHoanLai, Long id) {
+        this.hoaDonRepository.updateTienHoanLaiById(tienHoanLai, id);
+        return 1;
+    }
 
 }

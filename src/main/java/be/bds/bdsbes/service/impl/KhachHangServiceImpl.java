@@ -132,13 +132,15 @@ public class KhachHangServiceImpl implements IKhachHangService {
     @Override
     public Boolean createOrUpdate(KhachHangDTO khachHangDTO) throws ServiceException{
         for(KhachHang kh: khachHangRepository.findAll()){
-            if(kh.getCccd().trim().equals(khachHangDTO.getCccd().trim())){
-                kh.setSdt(khachHangDTO.getSdt());
-                kh.setHoTen(khachHangDTO.getHoTen());
-                kh.setCccd(khachHangDTO.getCccd());
-                kh.setNgaySinh(khachHangDTO.getNgaySinh());
-                this.khachHangRepository.save(kh);
-                return true;
+            if(kh.getCccd() != null){
+                if(kh.getCccd().trim().equals(khachHangDTO.getCccd().trim())){
+                    kh.setSdt(khachHangDTO.getSdt());
+                    kh.setHoTen(khachHangDTO.getHoTen());
+                    kh.setCccd(khachHangDTO.getCccd());
+                    kh.setNgaySinh(khachHangDTO.getNgaySinh());
+                    this.khachHangRepository.save(kh);
+                    return true;
+                }
             }
         }
         Random random = new Random();

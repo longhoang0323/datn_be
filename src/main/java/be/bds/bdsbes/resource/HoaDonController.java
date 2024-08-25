@@ -280,4 +280,18 @@ public class HoaDonController {
                 this.iHoaDonService.updateTienHoanLaibyId(tienHoanLai, id)
         );
     }
+
+    @GetMapping("list-xac-nhan")
+    public ResponseEntity<?> getListXacNhan(
+            @RequestParam(value = "page", defaultValue = AppConstantsUtil.DEFAULT_PAGE_NUMBER) int page,
+            @RequestParam(value = "size", defaultValue = AppConstantsUtil.DEFAULT_PAGE_SIZE) int size) {
+        try {
+            return ResponseUtil.wrap(this.iHoaDonService.getListXacNhan(page, size));
+        } catch (Exception ex) {
+            log.error(this.getClass().getName(), ex);
+            return ResponseUtil.generateErrorResponse(ex);
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

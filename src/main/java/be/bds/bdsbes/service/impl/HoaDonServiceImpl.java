@@ -530,4 +530,21 @@ public class HoaDonServiceImpl implements IHoaDonService {
         return 1;
     }
 
+    @Override
+    public PagedResponse<HoaDonResponse> getListXacNhan(int page, int size) throws ServiceException {
+        Pageable pageable = PageRequest.of((page - 1), size, Sort.Direction.DESC, "id");
+        Page<HoaDonResponse> entities = hoaDonRepository.getListXacNhan(pageable);
+
+        List<HoaDonResponse> dtos = entities.toList();
+        return new PagedResponse<>(
+                dtos,
+                page,
+                size,
+                entities.getTotalElements(),
+                entities.getTotalPages(),
+                entities.isLast(),
+                entities.getSort().toString()
+        );
+    }
+
 }

@@ -32,8 +32,8 @@ public interface DatPhongRepository extends JpaRepository<DatPhong, Long> {
             "from DatPhong d join d.khachHang u where d.id= :id")
     DatPhongResponse get(Long id);
 
-    @Query("select d from DatPhong d where d.khachHang.id = :id and d.trangThai = :trangThai")
-    Page<DatPhong> getAllDatPhongByUser(Pageable pageable, Long id, Integer trangThai);
+    @Query("select d from DatPhong d where d.khachHang.id = :id")
+    Page<DatPhong> getAllDatPhongByUser(Pageable pageable, Long id);
 
     @Query("SELECT CASE WHEN COUNT(dp) > 0 THEN true ELSE false END " +
             "FROM DatPhong dp " +

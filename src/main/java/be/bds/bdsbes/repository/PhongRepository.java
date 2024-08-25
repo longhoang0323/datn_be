@@ -184,4 +184,10 @@ public interface PhongRepository extends JpaRepository<Phong, Long> {
             " cast(:checkOut as date) = cast(d.checkOut as date)))")
     List<PhongMapping> getListSameRoom2(String tenLoaiPhong, Long id, LocalDateTime checkIn, LocalDateTime checkOut);
 
+    @Query("select new be.bds.bdsbes.payload.PhongMapping(p.id, p.ma, p.trangThai, l.id, l.tenLoaiPhong, l.giaTheoNgay, l.giaTheoGio, l.soNguoi, l.tienIch, l.ghiChu) from Phong  p inner join ChiTietPhong ctp on p.id = ctp.phong.id inner join LoaiPhong l on p.loaiPhong.id = l.id where p.trangThai = 1 and ctp.trangThai = 1 and p.id <> :id and p.id not in " +
+            "(select d.phong.id from DatPhong d where (d.trangThai = 1 or d.trangThai = 2 or d.trangThai = 5) and ((cast(:checkIn as date) between cast(d.checkIn as date) and cast(d.checkOut as date)) or (cast(:checkOut as date) between cast(d.checkIn as date) and cast(d.checkOut as date)) " +
+            "or (cast(d.checkIn as date) between cast(:checkIn as date) and cast(:checkOut as date)) or (cast(d.checkOut as date) between cast(:checkIn as date) and cast(:checkOut as date)) or cast(:checkIn as date) = cast(d.checkIn as date) or" +
+            " cast(:checkOut as date) = cast(d.checkOut as date)))")
+    List<PhongMapping> getListThemPhong(Long id, LocalDateTime checkIn, LocalDateTime checkOut);
+
 }

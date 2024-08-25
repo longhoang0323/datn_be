@@ -378,4 +378,14 @@ public class PhongController {
     ) {
         return ResponseEntity.ok(this.iPhongService.getListDoiPhong(tenLoaiPhong, id, LocalDateTime.parse(checkIn), LocalDateTime.parse(checkOut)));
     }
+
+    @GetMapping("/list-them-phong")
+    public ResponseEntity<?> getListThemPhong(
+            @RequestParam(value = "id") Long id,
+            @RequestParam(value = "checkIn", defaultValue = "") String checkIn,
+            @RequestParam(value = "checkOut", defaultValue = "") String checkOut
+    ) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return ResponseEntity.ok(this.iPhongService.getListThemPhong(id, LocalDate.parse(checkIn, formatter).atStartOfDay(), LocalDate.parse(checkOut, formatter).atStartOfDay()));
+    }
 }

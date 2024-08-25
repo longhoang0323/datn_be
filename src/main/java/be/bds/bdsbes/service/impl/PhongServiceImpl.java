@@ -818,4 +818,9 @@ public class PhongServiceImpl implements IPhongService {
         return phongRepository.getListSameRoom2(tenLoaiPhong, id, checkIn, checkOut);
     }
 
+    @Override
+    public List<PhongMapping> getListThemPhong(Long id, LocalDateTime checkIn, LocalDateTime checkOut) {
+        return phongRepository.getListThemPhong(id, checkIn, checkOut);
+    }
+
 }

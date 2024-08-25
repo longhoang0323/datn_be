@@ -70,4 +70,6 @@ public interface IHoaDonService {
     Integer updateTienTichDiembyId(BigDecimal tienTichDiem, Long id);
 
     Integer updateTienHoanLaibyId(BigDecimal tienHoanLai, Long id);
+
+    PagedResponse<HoaDonResponse> getListXacNhan(int page, int size) throws ServiceException;
 }

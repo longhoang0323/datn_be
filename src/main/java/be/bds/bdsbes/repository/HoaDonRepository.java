@@ -83,7 +83,7 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     @Query ("select sum(h.tienThanhToan) from HoaDon h join KhachHang k on h.khachHang.id = k.id group by k.id, h.trangThai having k.id = :id and h.trangThai = 5")
     BigDecimal getTongTienByKhachHang(Long id);
 
-    @Query("select h from HoaDon h where h.khachHang.id = :id and (h.trangThai = 0 or h.trangThai = 7)")
+    @Query("select h from HoaDon h where h.khachHang.id = :id")
     Page<HoaDon> findByKhachHang(Pageable pageable, Long id);
 
     @Transactional
@@ -107,7 +107,7 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     Integer updateTienDichVuById(BigDecimal tienDichVu, Long id);
 
     @Query("select new be.bds.bdsbes.payload.HoaDonResponse(p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.id, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan, p.tienHoanLai) from HoaDon p inner join p.khachHang k where p.trangThai = :trangThai " +
-            "group by k.id, p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan")
+            "group by k.id, p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan, p.tienHoanLai")
     Page<HoaDonResponse> getListByTrangThai(Pageable pageable, int trangThai);
 
     @Transactional
@@ -119,5 +119,8 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     @Modifying
     @Query("UPDATE HoaDon h SET h.tienHoanLai = :tienHoanLai WHERE h.id = :id")
     Integer updateTienHoanLaiById(BigDecimal tienHoanLai, Long id);
+
+    @Query("select new be.bds.bdsbes.payload.HoaDonResponse(p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.id, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan, p.tienHoanLai) from HoaDon p inner join p.khachHang k where p.trangThai = 2 or p.trangThai = 6")
+    Page<HoaDonResponse> getListXacNhan(Pageable pageable);
 
 }

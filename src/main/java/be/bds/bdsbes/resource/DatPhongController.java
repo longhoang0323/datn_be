@@ -37,6 +37,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 
@@ -395,7 +396,8 @@ public class DatPhongController {
     }
 
     @PostMapping("/list-room-books")
-    public ResponseEntity<?> getListRoomBook(@RequestParam(name = "cccd", required = false) String cccd) {
+    public ResponseEntity<?> getListRoomBook(@RequestBody Map<String, String> payload) {
+        String cccd = payload.get("cccd");
         return ResponseEntity.ok(this.iDatPhongService.listRoomBooks(cccd));
     }
 

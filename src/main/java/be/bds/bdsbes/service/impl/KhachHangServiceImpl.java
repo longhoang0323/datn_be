@@ -181,7 +181,9 @@ public class KhachHangServiceImpl implements IKhachHangService {
         khachHang.setGioiTinh(khachHangDTO.getGioiTinh());
         khachHang.setNgaySinh(khachHangDTO.getNgaySinh());
         khachHang.setDiaChi(khachHangDTO.getDiaChi());
-        khachHang.setGhiChu(khachHangDTO.getGhiChu());
+        if(khachHang.getGhiChu() == null){
+            khachHang.setGhiChu("0");
+        }
         khachHangRepository.save(khachHang);
         return true;
     }
@@ -199,7 +201,7 @@ public class KhachHangServiceImpl implements IKhachHangService {
     @Override
     public Integer updateGhiChu(String ghiChu, Long id) {
         KhachHang khachHang = khachHangRepository.findById(id).get();
-        if(khachHang.getGhiChu() != null || !khachHang.getGhiChu().isEmpty() || Integer.parseInt(khachHang.getGhiChu()) > 0){
+        if(khachHang.getGhiChu() != null && (!khachHang.getGhiChu().isEmpty() || Integer.parseInt(khachHang.getGhiChu()) > 0)){
             this.khachHangRepository.updateGhiChu(String.valueOf((Integer.parseInt(khachHang.getGhiChu()) + Integer.parseInt(ghiChu))), id);
             return 1;
         }

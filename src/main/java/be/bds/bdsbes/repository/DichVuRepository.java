@@ -25,4 +25,9 @@ public interface DichVuRepository extends JpaRepository<DichVu, Long> {
     @Modifying
     @Query("UPDATE DichVu dv SET dv.trangThai = :trangThai WHERE dv.id = :id")
     Integer updateTrangThaiById(int trangThai, Long id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE DichVu dv SET dv.soLuong = (dv.soLuong + :soLuong) WHERE dv.id = :id")
+    Integer updateCongSoLuong(int soLuong, Long id);
 }

@@ -394,4 +394,9 @@ public class DatPhongController {
         return ResponseEntity.ok(dtoList);
     }
 
+    @PostMapping("/list-room-books")
+    public ResponseEntity<?> getListRoomBook(@RequestParam(name = "cccd", required = false) String cccd) {
+        return ResponseEntity.ok(this.iDatPhongService.listRoomBooks(cccd));
+    }
+
 }

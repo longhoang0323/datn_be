@@ -641,4 +641,30 @@ public class DatPhongServiceImpl implements IDatPhongService {
         return datPhongRepository.findMonthlyBookings();
     }
 
+    @Override
+    public List<PhongResponse1> listRoomBooks(String cccd) {
+        List<Phong> listPhong = phongRepository.findAll();
+        List<PhongResponse1> result = new ArrayList<>();
+
+        for (Phong phong : listPhong) {
+            List<DatPhongMapping> listDatPhong = datPhongRepository.getListDatPhongByDate(phong.getId(), LocalDate.now(), LocalDate.now());
+
+            boolean matches = listDatPhong.stream().anyMatch(datPhong -> datPhong.getCccd().equals(cccd));
+
+            if (matches) {
+                PhongResponse1 response = convertToPhongResponse1(phong);
+                result.add(response);
+            }
+        }
+
+        return result;
+    }
+
+    private PhongResponse1 convertToPhongResponse1(Phong phong) {
+        PhongResponse1 response = new PhongResponse1();
+        response.setId(phong.getId());
+        response.setMa(phong.getMa());
+        return response;
+    }
+
 }

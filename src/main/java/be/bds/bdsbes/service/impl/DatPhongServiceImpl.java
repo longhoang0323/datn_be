@@ -664,6 +664,9 @@ public class DatPhongServiceImpl implements IDatPhongService {
         PhongResponse1 response = new PhongResponse1();
         response.setId(phong.getId());
         response.setMa(phong.getMa());
+        response.setTenLoaiPhong(phong.getLoaiPhong().getTenLoaiPhong());
+        response.setGiaPhong(phong.getGiaPhong());
+        response.setTrangThai(phong.getTrangThai());
         return response;
     }
 

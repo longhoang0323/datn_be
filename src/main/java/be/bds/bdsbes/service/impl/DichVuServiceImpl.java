@@ -155,5 +155,11 @@ public class DichVuServiceImpl implements IDichVuService {
                 entities.getSort().toString()
         );
     }
+
+    @Override
+    public Integer updateCongSoLuong(int soLuong, Long id) {
+        this.dichVuRepository.updateCongSoLuong(soLuong, id);
+        return 1;
+    }
 }
 

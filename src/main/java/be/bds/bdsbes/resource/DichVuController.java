@@ -112,4 +112,9 @@ public class DichVuController {
     public ResponseEntity<?> updateSoLuong(@RequestParam(value = "id") Long id, @RequestBody Integer soLuong) {
         return ResponseEntity.ok(this.IDichVuService.updateSoLuong(id, soLuong));
     }
+
+    @PutMapping("update-cong-so-luong")
+    public ResponseEntity<?> updateCongSoLuong(@RequestParam(value = "id") Long id, @RequestBody Integer soLuong) {
+        return ResponseEntity.ok(this.IDichVuService.updateCongSoLuong(soLuong, id));
+    }
 }

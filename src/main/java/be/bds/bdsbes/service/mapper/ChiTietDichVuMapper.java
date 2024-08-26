@@ -7,8 +7,8 @@ import org.mapstruct.*;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface ChiTietDichVuMapper extends EntityMapper<ChiTietDichVuResponse1, ChiTietDichVu> {
 
-//    @Mapping(target = "idDichVu", source = "dichVu.id")
-//    @Mapping(target = "idDatPhong", source = "datPhong.id")
+    @Mapping(target = "idDichVu", source = "dichVu.id")
+    @Mapping(target = "idDatPhong", source = "datPhong.id")
     @Mapping(target = "tenDichVu", source = "dichVu.tenDichVu")
     @Mapping(target = "giaDichVu", source = "dichVu.giaDichVu")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

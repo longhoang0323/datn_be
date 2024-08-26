@@ -533,7 +533,12 @@ public class HoaDonServiceImpl implements IHoaDonService {
 
     @Override
     public Integer updateTienHoanLaibyId(BigDecimal tienHoanLai, Long id) {
-        this.hoaDonRepository.updateTienHoanLaiById(tienHoanLai, id);
+        HoaDon hoaDon = hoaDonRepository.findById(id).get();
+        if(hoaDon.getTienHoanLai() == null){
+            this.hoaDonRepository.updateTienHoanLaiById(tienHoanLai, id);
+            return 1;
+        }
+        this.hoaDonRepository.updateTienHoanLaiById(hoaDon.getTienHoanLai().add(tienHoanLai), id);
         return 1;
     }
 

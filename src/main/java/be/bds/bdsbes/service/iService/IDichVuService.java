@@ -26,4 +26,6 @@ public interface IDichVuService {
 
     public PagedResponse<DichVuResponse1> getAccounts(int page, int size) throws ServiceException;
     PagedResponse<DichVuResponse1> searchRoomService(int page, int size, String searchInput) throws ServiceException;
+
+    Integer updateCongSoLuong(int soLuong, Long id);
 }

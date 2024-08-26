@@ -74,4 +74,6 @@ public interface IDatPhongService {
     DatPhongMapping getRoomCheckInToday(LocalDate checkIn, Long id);
 
     List<MonthlyBookingDTO> getMonthlyBookings();
+
+    List<PhongResponse1> listRoomBooks(String cccd);
 }

@@ -85,6 +85,14 @@ public class DichVuServiceImpl implements IDichVuService {
     }
 
     @Override
+    public Integer updateSoLuong(Long id, int soLuong) {
+        DichVu dichVu = dichVuRepository.findById(id).get();
+        dichVu.setSoLuong(dichVu.getSoLuong() - soLuong);
+        dichVuRepository.save(dichVu);
+        return 1;
+    }
+
+    @Override
     public DichVu update(DichVuDTO dichVuDTO, Long id) {
         Optional<DichVu> dichVuOptional = dichVuRepository.findById(id);
         if(dichVuOptional.isPresent()){

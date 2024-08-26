@@ -65,14 +65,14 @@ public class DichVuController {
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestParam (value = "id") Long id, @RequestBody @Valid DichVuDTO dichVuDTO, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            List<ObjectError> errorList = bindingResult.getAllErrors();
-            return ResponseEntity.ok(errorList);
-        }
-        if(IDichVuService.update(dichVuDTO, id) == null){
-            return ResponseEntity.ok("Update failed");
-        }
+    public ResponseEntity<?> update(@RequestParam (value = "id") Long id, @RequestBody DichVuDTO dichVuDTO){
+//        if(bindingResult.hasErrors()){
+//            List<ObjectError> errorList = bindingResult.getAllErrors();
+//            return ResponseEntity.ok(errorList);
+//        }
+//        if(IDichVuService.update(dichVuDTO, id) == null){
+//            return ResponseEntity.ok("Update failed");
+//        }
         return ResponseEntity.ok(IDichVuService.update(dichVuDTO, id));
     }
     @PutMapping("delete")
@@ -106,5 +106,10 @@ public class DichVuController {
         response.setHeader(headerKey, headerValue);
 
         this.pdfGenerator.exportDV(response,id);
+    }
+
+    @PutMapping("update-so-luong")
+    public ResponseEntity<?> updateSoLuong(@RequestParam(value = "id") Long id, @RequestBody Integer soLuong) {
+        return ResponseEntity.ok(this.IDichVuService.updateSoLuong(id, soLuong));
     }
 }

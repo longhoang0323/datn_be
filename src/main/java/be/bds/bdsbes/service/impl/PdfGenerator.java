@@ -129,7 +129,7 @@ public class PdfGenerator {
         paragraphNull.setAlignment(Paragraph.ALIGN_LEFT);
 
 
-        String formattedTongTien = formatter.format(hoaDon.getTongTien());
+        String formattedTongTien = formatter.format(hoaDon.getTienThanhToan());
         Paragraph paragraphTongTien = new Paragraph("\nTong thanh toan: " + formattedTongTien + "VND", fontDate);
         paragraphTongTien.setAlignment(Paragraph.ALIGN_LEFT);
         Paragraph paragraph9 = new Paragraph("\n", fontInfor);
@@ -188,6 +188,11 @@ public class PdfGenerator {
             Paragraph paragraphGiamGia = new Paragraph("\nGiam gia: " + formatter.format(hoaDon.getTienTichDiem()) + "VND", fontDate);
             paragraphGiamGia.setAlignment(Paragraph.ALIGN_LEFT);
             document.add(paragraphGiamGia);
+        }
+        if(hoaDon.getTienHoanLai() != null){
+            Paragraph paragraphTienHoanLai = new Paragraph("\nTien hoan lai: " + formatter.format(hoaDon.getTienHoanLai()) + "VND", fontDate);
+            paragraphTienHoanLai.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(paragraphTienHoanLai);
         }
         document.add(paragraphTongTien);
         if(hoaDon.getTienCoc() != null){

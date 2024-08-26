@@ -78,6 +78,7 @@ public class KhachHangServiceImpl implements IKhachHangService {
         khachHang.setHoTen(khachHangDTO.getHoTen());
         khachHang.setCccd(khachHangDTO.getCccd());
         khachHang.setSdt(khachHangDTO.getSdt());
+        khachHang.setGhiChu("0");
         khachHang.setTheThanhVien(TheThanhVien.builder().id(Long.parseLong("1")).build());
         return khachHangRepository.save(khachHang);
     }
@@ -152,6 +153,7 @@ public class KhachHangServiceImpl implements IKhachHangService {
         khachHang.setHoTen(khachHangDTO.getHoTen());
         khachHang.setCccd(khachHangDTO.getCccd());
         khachHang.setSdt(khachHangDTO.getSdt());
+        khachHang.setGhiChu("0");
         khachHang.setNgaySinh(khachHangDTO.getNgaySinh());
         khachHang.setTheThanhVien(TheThanhVien.builder().id(Long.parseLong("1")).build());
         this.khachHangRepository.save(khachHang);
@@ -197,7 +199,7 @@ public class KhachHangServiceImpl implements IKhachHangService {
     @Override
     public Integer updateGhiChu(String ghiChu, Long id) {
         KhachHang khachHang = khachHangRepository.findById(id).get();
-        if(!khachHang.getGhiChu().isEmpty() || Integer.parseInt(khachHang.getGhiChu()) > 0){
+        if(khachHang.getGhiChu() != null || !khachHang.getGhiChu().isEmpty() || Integer.parseInt(khachHang.getGhiChu()) > 0){
             this.khachHangRepository.updateGhiChu(String.valueOf((Integer.parseInt(khachHang.getGhiChu()) + Integer.parseInt(ghiChu))), id);
             return 1;
         }

@@ -401,4 +401,11 @@ public class DatPhongController {
         return ResponseEntity.ok(this.iDatPhongService.listRoomBooks(cccd));
     }
 
+    @GetMapping("/list-by-cccd-check-in")
+    public ResponseEntity<?> getListMappingByCheckInAndCCCD
+            (@RequestParam(value = "checkIn", defaultValue = "") String checkIn,
+             @RequestParam(value = "cccd", defaultValue = "") String cccd) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return ResponseEntity.ok(this.iDatPhongService.getListMappingByCheckInAndCCCD(LocalDate.parse(checkIn, formatter), cccd));
+    }
 }

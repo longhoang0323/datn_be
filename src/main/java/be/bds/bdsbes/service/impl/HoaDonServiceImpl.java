@@ -390,13 +390,13 @@ public class HoaDonServiceImpl implements IHoaDonService {
 
     @Override
     public Boolean createOrUpdateTaiQuay(HoaDonDTO hoaDonDTO) throws ServiceException {
-        KhachHang khachHang = khachHangRepository.findById(hoaDonDTO.getIdKhachHang()).get();
-        Long idKH = khachHangRepository.findByCccd(khachHang.getCccd());
-        HoaDonResponse hoaDonResponse = hoaDonRepository.getHoaDonTaiQuay(idKH, LocalDate.now());
-        if (hoaDonResponse != null && (hoaDonResponse.getTrangThai() == 3 || hoaDonResponse.getTrangThai() == 1)) {
-            this.updateTaiQuay(hoaDonDTO, hoaDonResponse.getId());
-            return true;
-        }
+//        KhachHang khachHang = khachHangRepository.findById(hoaDonDTO.getIdKhachHang()).get();
+//        Long idKH = khachHangRepository.findByCccd(khachHang.getCccd());
+//        HoaDonResponse hoaDonResponse = hoaDonRepository.getHoaDonTaiQuay(idKH, LocalDate.now());
+//        if (hoaDonResponse != null && (hoaDonResponse.getTrangThai() == 3 || hoaDonResponse.getTrangThai() == 1)) {
+//            this.updateTaiQuay(hoaDonDTO, hoaDonResponse.getId());
+//            return true;
+//        }
         this.createTaiQuay(hoaDonDTO);
         return true;
     }

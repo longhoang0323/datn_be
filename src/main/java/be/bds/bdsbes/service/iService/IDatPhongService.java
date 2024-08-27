@@ -76,4 +76,6 @@ public interface IDatPhongService {
     List<MonthlyBookingDTO> getMonthlyBookings();
 
     List<PhongResponse1> listRoomBooks(String cccd);
+
+    List<DatPhongMapping> getListMappingByCheckInAndCCCD(LocalDate checkIn, String cccd);
 }

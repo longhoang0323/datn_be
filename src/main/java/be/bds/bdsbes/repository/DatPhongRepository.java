@@ -143,4 +143,11 @@ public interface DatPhongRepository extends JpaRepository<DatPhong, Long> {
             "GROUP BY YEAR(dp.ngayDat), MONTH(dp.ngayDat) " +
             "ORDER BY YEAR(dp.ngayDat), MONTH(dp.ngayDat)")
     List<MonthlyBookingDTO> findMonthlyBookings();
+
+    @Query("select new be.bds.bdsbes.payload.DatPhongMapping(p.id, d.ma, k.id, k.ma, k.hoTen, k.sdt, " +
+            "d.ngayDat, d.checkIn, d.checkOut, d.soNguoi, d.ghiChu, d.trangThai, p.ma, d.tongGia, d.id, p.loaiPhong.tenLoaiPhong, p.loaiPhong.giaTheoNgay, ctp.tang, h.id, h.ma, k.cccd, k.ngaySinh" +
+            ", h.ngayTao, h.ngayThanhToan, h.tongTien, h.trangThai, h.tienCoc, h.thoiGianCoc, h.tienPhong, h.tienDichVu, h.tienPhat, h.tienTichDiem, h.tienThanhToan, h.tienHoanLai, d.thoiGianCheckOut, tt.hoTen, tt.sdt, k.ghiChu)" +
+            " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id left join ThongTinNhanPhong tt on d.id = tt.idDatPhong.id" +
+            " where k.cccd = :cccd and cast(d.checkIn as date) = cast(:checkIn as date)")
+    List<DatPhongMapping> getListDatPhongByCCCDAndCheckIn(LocalDate checkIn, String cccd);
 }

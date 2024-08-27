@@ -660,6 +660,11 @@ public class DatPhongServiceImpl implements IDatPhongService {
         return result;
     }
 
+    @Override
+    public List<DatPhongMapping> getListMappingByCheckInAndCCCD(LocalDate checkIn, String cccd) {
+        return datPhongRepository.getListDatPhongByCCCDAndCheckIn(checkIn, cccd);
+    }
+
     private PhongResponse1 convertToPhongResponse1(Phong phong) {
         PhongResponse1 response = new PhongResponse1();
         response.setId(phong.getId());

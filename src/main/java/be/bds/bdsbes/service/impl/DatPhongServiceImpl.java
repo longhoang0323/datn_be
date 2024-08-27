@@ -550,7 +550,8 @@ public class DatPhongServiceImpl implements IDatPhongService {
 //        Long idKhachHang = khachHangRepository.findByIdKhachHang(datPhongDTO.getUserId());
         datPhong.setKhachHang(KhachHang.builder().id(datPhongDTO.getIdKhachHang()).build());
         datPhong.setPhong(Phong.builder().id(datPhongDTO.getIdPhong()).build());
-        Long idHoaDon = hoaDonRepository.getIdTaiQuay(datPhongDTO.getIdKhachHang(), LocalDate.now());
+        List<HoaDon> listHD = hoaDonRepository.findAll();
+        Long idHoaDon = listHD.get(listHD.size() - 1).getId();
         System.out.println(datPhongDTO.getIdKhachHang());
         datPhong.setHoaDon(HoaDon.builder().id(idHoaDon).build());
         this.datPhongRepository.save(datPhong);

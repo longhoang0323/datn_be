@@ -337,8 +337,16 @@ public class DatPhongController {
     }
 
     @GetMapping("/list-mapper")
-    public ResponseEntity<?> getListMapping() {
-        return ResponseEntity.ok(this.iDatPhongService.getListDatPhongMapping());
+    public ResponseEntity<?> getListMapping(
+            @RequestParam(value = "page", defaultValue = AppConstantsUtil.DEFAULT_PAGE_NUMBER) int page,
+            @RequestParam(value = "size", defaultValue = AppConstantsUtil.DEFAULT_PAGE_SIZE) int size
+    ) {
+        try {
+            return ResponseUtil.wrap(this.iDatPhongService.getListDatPhongMapping(page, size));
+        } catch (Exception ex) {
+            log.error(this.getClass().getName(), ex);
+            return ResponseUtil.generateErrorResponse(ex);
+        }
     }
 
     @GetMapping("/list-map-by-hoa-don")

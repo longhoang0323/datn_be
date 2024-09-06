@@ -3,14 +3,16 @@ package be.bds.bdsbes.entities.enums;
 public enum StatusRoom {
 
     STATUS1(1, "HD", "Hoạt động"),
-    STATUS2(2, "KHD", "Không hoạt động");
+    STATUS2(2, "KHD", "Không hoạt động"),
+    STATUS3(3, "DD", "Đang dọn dẹp");
 
     private int id;
+
     private String code;
+
     private String name;
 
     StatusRoom() {
-
     }
 
     StatusRoom(int id, String code, String name) {

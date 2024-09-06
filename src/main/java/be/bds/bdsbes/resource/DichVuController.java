@@ -11,12 +11,15 @@ import com.itextpdf.text.DocumentException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -116,5 +119,20 @@ public class DichVuController {
     @PutMapping("update-cong-so-luong")
     public ResponseEntity<?> updateCongSoLuong(@RequestParam(value = "id") Long id, @RequestBody Integer soLuong) {
         return ResponseEntity.ok(this.IDichVuService.updateCongSoLuong(soLuong, id));
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadFile(@RequestParam("image") MultipartFile file) throws IOException {
+        // Lưu file vào thư mục uploads
+        if(file.getOriginalFilename() != null){
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            file.transferTo(new File("uploads/" + fileName));
+
+            // Lưu đường dẫn vào database
+            // ...
+
+            return ResponseEntity.ok().body("Image uploaded successfully: " + fileName);
+        }
+        return null;
     }
 }

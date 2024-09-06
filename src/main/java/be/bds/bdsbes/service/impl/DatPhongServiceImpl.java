@@ -13,6 +13,7 @@ import be.bds.bdsbes.service.iService.IDatPhongService;
 import be.bds.bdsbes.service.dto.DatPhongDTO;
 import be.bds.bdsbes.service.dto.response.DatPhongResponse;
 import be.bds.bdsbes.service.mapper.DatPhongMapper;
+import be.bds.bdsbes.service.mapper.DatPhongMapper2;
 import be.bds.bdsbes.service.mapper.PhongMapper;
 import be.bds.bdsbes.utils.AppConstantsUtil;
 import be.bds.bdsbes.utils.ServiceExceptionBuilderUtil;
@@ -60,6 +61,9 @@ public class DatPhongServiceImpl implements IDatPhongService {
 
     @Autowired
     PhongMapper phongMapper;
+
+    @Autowired
+    DatPhongMapper2 datPhongMapper2;
 
     public int getNumberOfRecords() {
         Long count = datPhongRepository.count();
@@ -597,8 +601,21 @@ public class DatPhongServiceImpl implements IDatPhongService {
     }
 
     @Override
-    public List<DatPhongMapping> getListDatPhongMapping() {
-        return datPhongRepository.getListDatPhong();
+    public PagedResponse<DatPhongMapping> getListDatPhongMapping(int page, int size) {
+        Pageable pageable = PageRequest.of((page - 1), size);
+        Page<DatPhongMapping> entities = datPhongRepository.getPageDatPhong(pageable);
+
+        List<DatPhongMapping> dtos = entities.toList();
+
+        return new PagedResponse<>(
+                dtos,
+                page,
+                size,
+                entities.getTotalElements(),
+                entities.getTotalPages(),
+                entities.isLast(),
+                entities.getSort().toString()
+        );
     }
 
     @Override

@@ -59,7 +59,7 @@ public interface IDatPhongService {
 
     PagedResponse<DatPhongResponse> getDatPhongByKH(int page, int size, Long id) throws ServiceException;
 
-    List<DatPhongMapping> getListDatPhongMapping();
+    PagedResponse<DatPhongMapping> getListDatPhongMapping(int page, int size);
 
     DatPhongMapping getPhongById(Long id);
 

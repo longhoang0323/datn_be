@@ -161,5 +161,11 @@ public class DichVuServiceImpl implements IDichVuService {
         this.dichVuRepository.updateCongSoLuong(soLuong, id);
         return 1;
     }
+
+    @Override
+    public Integer updateImage(Long id, String image) {
+        this.dichVuRepository.updateImage(id, image);
+        return 1;
+    }
 }
 

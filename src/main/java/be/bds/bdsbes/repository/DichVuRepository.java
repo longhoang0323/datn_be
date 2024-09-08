@@ -30,4 +30,9 @@ public interface DichVuRepository extends JpaRepository<DichVu, Long> {
     @Modifying
     @Query("UPDATE DichVu dv SET dv.soLuong = (dv.soLuong + :soLuong) WHERE dv.id = :id")
     Integer updateCongSoLuong(int soLuong, Long id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE DichVu dv SET dv.image = :image WHERE dv.id = :id")
+    Integer updateImage(Long id, String image);
 }

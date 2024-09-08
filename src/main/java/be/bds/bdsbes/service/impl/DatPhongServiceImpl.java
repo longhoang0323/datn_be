@@ -512,7 +512,7 @@ public class DatPhongServiceImpl implements IDatPhongService {
 //                    .addError(new ValidationErrorResponse("checkIn", ValidationErrorUtil.CheckInBeforeDateNow))
 //                    .build();
 //        }
-
+        System.out.println(datPhongDTO.getCheckIn() + " " + datPhongDTO.getCheckOut());
         if (datPhongRepository.validateCheckIn(datPhongDTO.getIdPhong(), datPhongDTO.getCheckIn(), datPhongDTO.getCheckOut())) {
             throw ServiceExceptionBuilderUtil.newBuilder()
                     .addError(new ValidationErrorResponse("checkIn", ValidationErrorUtil.CheckDateBook))

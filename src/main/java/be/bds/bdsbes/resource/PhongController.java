@@ -388,4 +388,9 @@ public class PhongController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return ResponseEntity.ok(this.iPhongService.getListThemPhong(id, LocalDate.parse(checkIn, formatter).atStartOfDay(), LocalDate.parse(checkOut, formatter).atStartOfDay()));
     }
+
+    @GetMapping("/list-all-rooms")
+    public ResponseEntity<?> getListAllRooms() {
+        return ResponseEntity.ok(this.iPhongService.getAllListRooms());
+    }
 }

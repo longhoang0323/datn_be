@@ -2,6 +2,7 @@ package be.bds.bdsbes.repository;
 
 import be.bds.bdsbes.entities.DatPhong;
 import be.bds.bdsbes.entities.Phong;
+import be.bds.bdsbes.payload.DatPhongMap;
 import be.bds.bdsbes.payload.DatPhongMapping;
 import be.bds.bdsbes.service.dto.MonthlyBookingDTO;
 import be.bds.bdsbes.service.dto.response.DatPhongResponse;
@@ -109,11 +110,11 @@ public interface DatPhongRepository extends JpaRepository<DatPhong, Long> {
             " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id inner join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id left join ThongTinNhanPhong tt on d.id = tt.idDatPhong.id order by d.ma asc")
     Page<DatPhongMapping> getPageDatPhong(Pageable pageable);
 
-    @Query("select new be.bds.bdsbes.payload.DatPhongMapping(p.id, d.ma, k.id, k.ma, k.hoTen, k.sdt, " +
-            "d.ngayDat, d.checkIn, d.checkOut, d.soNguoi, d.ghiChu, d.trangThai, p.ma, d.tongGia, d.id, p.loaiPhong.tenLoaiPhong, p.loaiPhong.giaTheoNgay, ctp.tang, h.id, h.ma, k.cccd, k.ngaySinh" +
+    @Query("select new be.bds.bdsbes.payload.DatPhongMap(p.id, d.ma, k.id, k.ma, k.hoTen, k.sdt, " +
+            "d.ngayDat, d.checkIn, d.checkOut, d.soNguoi, d.ghiChu, d.trangThai, p.ma, d.tongGia, d.id, p.loaiPhong.tenLoaiPhong, p.loaiPhong.id, p.loaiPhong.giaTheoNgay, ctp.tang, h.id, h.ma, k.cccd, k.ngaySinh" +
             ", h.ngayTao, h.ngayThanhToan, h.tongTien, h.trangThai, h.tienCoc, h.thoiGianCoc, h.tienPhong, h.tienDichVu, h.tienPhat, h.tienTichDiem, h.tienThanhToan, h.tienHoanLai, d.thoiGianCheckOut, tt.hoTen, tt.sdt, k.ghiChu)" +
             " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id left join ThongTinNhanPhong tt on d.id = tt.idDatPhong.id where d.id = :id")
-    DatPhongMapping getPhongById(Long id);
+    DatPhongMap getPhongById(Long id);
 
     @Query("select new be.bds.bdsbes.payload.DatPhongMapping(p.id, d.ma, k.id, k.ma, k.hoTen, k.sdt, " +
             "d.ngayDat, d.checkIn, d.checkOut, d.soNguoi, d.ghiChu, d.trangThai, p.ma, d.tongGia, d.id, p.loaiPhong.tenLoaiPhong, p.loaiPhong.giaTheoNgay, ctp.tang, h.id, h.ma, k.cccd, k.ngaySinh" +

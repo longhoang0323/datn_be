@@ -8,6 +8,7 @@ import be.bds.bdsbes.payload.PhongResponse1;
 import be.bds.bdsbes.payload.RoomMappingChiTietPhong;
 import be.bds.bdsbes.service.dto.PhongDTO;
 import be.bds.bdsbes.service.dto.response.PhongResponse;
+import be.bds.bdsbes.service.dto.response.RoomResponse;
 import be.bds.bdsbes.utils.dto.PagedResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -79,4 +80,6 @@ public interface IPhongService {
     List<PhongMapping> getListDoiPhong(String tenLoaiPhong, Long id, LocalDateTime checkIn, LocalDateTime checkOut);
 
     List<PhongMapping> getListThemPhong(Long id, LocalDateTime checkIn, LocalDateTime checkOut);
+
+    List<RoomResponse> getAllListRooms();
 }

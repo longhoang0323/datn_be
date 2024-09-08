@@ -4,6 +4,7 @@ import be.bds.bdsbes.entities.Phong;
 import be.bds.bdsbes.payload.PhongMapping;
 import be.bds.bdsbes.payload.PhongMappingResponse;
 import be.bds.bdsbes.payload.PhongResponse1;
+import be.bds.bdsbes.service.dto.response.RoomResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -189,5 +190,8 @@ public interface PhongRepository extends JpaRepository<Phong, Long> {
             "or (cast(d.checkIn as date) between cast(:checkIn as date) and cast(:checkOut as date)) or (cast(d.checkOut as date) between cast(:checkIn as date) and cast(:checkOut as date)) or cast(:checkIn as date) = cast(d.checkIn as date) or" +
             " cast(:checkOut as date) = cast(d.checkOut as date)))")
     List<PhongMapping> getListThemPhong(Long id, LocalDateTime checkIn, LocalDateTime checkOut);
+
+    @Query("select new be.bds.bdsbes.service.dto.response.RoomResponse(p.id, p.ma, lp.tenLoaiPhong, lp.soNguoi, lp.giaTheoNgay, p.trangThai) from Phong p left join LoaiPhong lp on p.loaiPhong.id = lp.id")
+    List<RoomResponse> getListPhong();
 
 }

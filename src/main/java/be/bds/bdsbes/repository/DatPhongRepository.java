@@ -157,4 +157,5 @@ public interface DatPhongRepository extends JpaRepository<DatPhong, Long> {
             " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id left join ThongTinNhanPhong tt on d.id = tt.idDatPhong.id" +
             " where k.cccd = :cccd and cast(d.checkIn as date) = cast(:checkIn as date)")
     List<DatPhongMapping> getListDatPhongByCCCDAndCheckIn(LocalDate checkIn, String cccd);
+
 }

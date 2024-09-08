@@ -3,14 +3,12 @@ package be.bds.bdsbes.service.iService;
 
 import be.bds.bdsbes.entities.DatPhong;
 import be.bds.bdsbes.exception.ServiceException;
+import be.bds.bdsbes.payload.DatPhongMap;
 import be.bds.bdsbes.payload.DatPhongMapping;
 import be.bds.bdsbes.payload.PhongResponse1;
-import be.bds.bdsbes.payload.TaiKhoanResponse1;
 import be.bds.bdsbes.service.dto.DatPhongDTO;
-import be.bds.bdsbes.service.dto.KhachHangDTO;
 import be.bds.bdsbes.service.dto.MonthlyBookingDTO;
 import be.bds.bdsbes.service.dto.response.DatPhongResponse;
-import be.bds.bdsbes.service.dto.response.PhongResponse;
 import be.bds.bdsbes.utils.dto.PagedResponse;
 
 import java.math.BigDecimal;
@@ -61,7 +59,7 @@ public interface IDatPhongService {
 
     PagedResponse<DatPhongMapping> getListDatPhongMapping(int page, int size);
 
-    DatPhongMapping getPhongById(Long id);
+    DatPhongMap getPhongById(Long id);
 
     List<DatPhongMapping> getListMappingByHD(Long id, Long idHD);
 
@@ -78,4 +76,6 @@ public interface IDatPhongService {
     List<PhongResponse1> listRoomBooks(String cccd);
 
     List<DatPhongMapping> getListMappingByCheckInAndCCCD(LocalDate checkIn, String cccd);
+
+    Boolean updateCheckout(LocalDateTime checkIn , LocalDateTime checkOut, Long id, Long idPhong);
 }

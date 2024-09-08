@@ -7,6 +7,7 @@ import be.bds.bdsbes.payload.PhongMappingResponse;
 import be.bds.bdsbes.payload.PhongResponse1;
 import be.bds.bdsbes.payload.RoomMappingChiTietPhong;
 import be.bds.bdsbes.repository.PhongRepository;
+import be.bds.bdsbes.service.dto.response.RoomResponse;
 import be.bds.bdsbes.service.iService.IPhongService;
 import be.bds.bdsbes.service.dto.PhongDTO;
 import be.bds.bdsbes.service.mapper.PhongMapper;
@@ -28,6 +29,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.*;
 
 @Slf4j
@@ -821,6 +824,26 @@ public class PhongServiceImpl implements IPhongService {
     @Override
     public List<PhongMapping> getListThemPhong(Long id, LocalDateTime checkIn, LocalDateTime checkOut) {
         return phongRepository.getListThemPhong(id, checkIn, checkOut);
+    }
+
+    @Override
+    public List<RoomResponse> getAllListRooms() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalTime localTime = localDateTime.toLocalTime();
+        System.out.println("Thời gian hiện tại theo giờ local là: " + localDateTime);
+
+        // Lấy giờ local của một khu vực cụ thể, ví dụ: "Asia/Ho_Chi_Minh"
+        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+        LocalDateTime localDateTimeHoChiMinh = LocalDateTime.now(zoneId);
+        System.out.println("Thời gian hiện tại ở Hồ Chí Minh là: " + localDateTimeHoChiMinh);
+        if (localTime.isAfter(LocalTime.NOON)) {
+            System.out.println("Đã quá 12 giờ trưa.");
+        }
+        // Kiểm tra nếu quá 14 giờ chiều
+        if (localTime.isAfter(LocalTime.of(14, 0))) {
+            System.out.println("Đã quá 14 giờ chiều.");
+        }
+        return phongRepository.getListPhong();
     }
 
 }

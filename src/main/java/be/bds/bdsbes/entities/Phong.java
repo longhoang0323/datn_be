@@ -1,9 +1,11 @@
 package be.bds.bdsbes.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -33,7 +35,7 @@ public class Phong {
     @Column(name = COLUMN_MA_NAME, length = 20)
     private String ma;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_loai_phong")
     private LoaiPhong loaiPhong;
 

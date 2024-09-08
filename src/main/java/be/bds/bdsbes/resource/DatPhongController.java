@@ -2,14 +2,17 @@ package be.bds.bdsbes.resource;
 
 import be.bds.bdsbes.exception.ServiceException;
 import be.bds.bdsbes.repository.DatPhongRepository;
-import be.bds.bdsbes.service.dto.KhachHangDTO;
+import be.bds.bdsbes.service.dto.DatPhongDTO;
 import be.bds.bdsbes.service.dto.MonthlyBookingDTO;
 import be.bds.bdsbes.service.iService.IDatPhongService;
-import be.bds.bdsbes.service.dto.DatPhongDTO;
 import be.bds.bdsbes.service.impl.PdfGenerator;
-import be.bds.bdsbes.utils.*;
+import be.bds.bdsbes.utils.ApiError;
+import be.bds.bdsbes.utils.AppConstantsUtil;
+import be.bds.bdsbes.utils.ResponseUtil;
+import be.bds.bdsbes.utils.StatusError;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.itextpdf.text.DocumentException;
@@ -34,12 +37,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import com.google.zxing.client.j2se.MatrixToImageWriter;
 
 @Slf4j
 @RestController
@@ -296,12 +298,12 @@ public class DatPhongController {
     }
 
     @GetMapping("so-phong-da-dat-by-day")
-    public ResponseEntity<?> soPhongDaDatByDay(@RequestParam(value = "year") int year,@RequestParam(value = "month") int month,@RequestParam(value = "day") int day) {
+    public ResponseEntity<?> soPhongDaDatByDay(@RequestParam(value = "year") int year, @RequestParam(value = "month") int month, @RequestParam(value = "day") int day) {
         return ResponseUtil.wrap(this.iDatPhongService.getSoPhongDaDatByToDay(day, month, year));
     }
 
     @GetMapping("so-phong-da-dat-by-month")
-    public ResponseEntity<?> soPhongDaDatByMonth(@RequestParam(value = "year") int year,@RequestParam(value = "month") int month) {
+    public ResponseEntity<?> soPhongDaDatByMonth(@RequestParam(value = "year") int year, @RequestParam(value = "month") int month) {
         return ResponseUtil.wrap(this.iDatPhongService.getSoPhongDaDatByMonth(month, year));
     }
 
@@ -392,7 +394,7 @@ public class DatPhongController {
 
     @GetMapping("/get-room-check-in-today")
     public ResponseEntity<?> getRoomCheckInToday(@RequestParam(name = "id") Long id,
-                                 @RequestParam(value = "checkIn", defaultValue = "") String checkIn) {
+                                                 @RequestParam(value = "checkIn", defaultValue = "") String checkIn) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return ResponseEntity.ok(this.iDatPhongService.getRoomCheckInToday(LocalDate.parse(checkIn, formatter), id));
     }
@@ -416,4 +418,32 @@ public class DatPhongController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return ResponseEntity.ok(this.iDatPhongService.getListMappingByCheckInAndCCCD(LocalDate.parse(checkIn, formatter), cccd));
     }
+
+    @PutMapping("/update-checkout")
+    public ResponseEntity<?> updateCheckout(@RequestBody Map<String, Object> request) {
+        String checkOutString = (String) request.get("checkOut");
+        OffsetDateTime checkOut = OffsetDateTime.parse(checkOutString);
+        String checkInString = (String) request.get("checkIn");
+        if (!checkInString.endsWith("Z")) {
+            checkInString += "Z";  // Add 'Z' if there's no offset
+        }
+        OffsetDateTime checkIn = OffsetDateTime.parse(checkInString);
+
+        Object idObj = request.get("id");
+        Object idPhongObj = request.get("idPhong");
+        Long id;
+        Long idPhong;
+        if (idObj instanceof Integer) {
+            id = ((Integer) idObj).longValue();
+            idPhong = ((Integer) idPhongObj).longValue();
+        } else if (idObj instanceof Long) {
+            id = (Long) idObj;
+            idPhong = (Long) idPhongObj;
+        } else {
+            return ResponseEntity.badRequest().body("Invalid type for id");
+        }
+        Boolean response = iDatPhongService.updateCheckout(checkIn.toLocalDateTime() ,checkOut.toLocalDateTime(), id, idPhong);
+        return ResponseUtil.wrap(response);
+    }
+
 }

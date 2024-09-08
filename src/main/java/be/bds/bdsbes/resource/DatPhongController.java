@@ -1,6 +1,7 @@
 package be.bds.bdsbes.resource;
 
 import be.bds.bdsbes.exception.ServiceException;
+import be.bds.bdsbes.payload.CheckOutRequest;
 import be.bds.bdsbes.repository.DatPhongRepository;
 import be.bds.bdsbes.service.dto.DatPhongDTO;
 import be.bds.bdsbes.service.dto.MonthlyBookingDTO;
@@ -10,6 +11,7 @@ import be.bds.bdsbes.utils.ApiError;
 import be.bds.bdsbes.utils.AppConstantsUtil;
 import be.bds.bdsbes.utils.ResponseUtil;
 import be.bds.bdsbes.utils.StatusError;
+import be.bds.bdsbes.utils.dto.ServiceException1;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -39,6 +41,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -420,30 +423,20 @@ public class DatPhongController {
     }
 
     @PutMapping("/update-checkout")
-    public ResponseEntity<?> updateCheckout(@RequestBody Map<String, Object> request) {
-        String checkOutString = (String) request.get("checkOut");
-        OffsetDateTime checkOut = OffsetDateTime.parse(checkOutString);
-        String checkInString = (String) request.get("checkIn");
-        if (!checkInString.endsWith("Z")) {
-            checkInString += "Z";  // Add 'Z' if there's no offset
-        }
-        OffsetDateTime checkIn = OffsetDateTime.parse(checkInString);
+    public ResponseEntity<?> updateCheckout(@RequestBody CheckOutRequest request) {
+        LocalDate checkIn = request.getCheckIn();
+        LocalDate checkOut = request.getCheckOut();
+        Long id = request.getId();
+        Long idPhong = request.getIdPhong();
 
-        Object idObj = request.get("id");
-        Object idPhongObj = request.get("idPhong");
-        Long id;
-        Long idPhong;
-        if (idObj instanceof Integer) {
-            id = ((Integer) idObj).longValue();
-            idPhong = ((Integer) idPhongObj).longValue();
-        } else if (idObj instanceof Long) {
-            id = (Long) idObj;
-            idPhong = (Long) idPhongObj;
-        } else {
-            return ResponseEntity.badRequest().body("Invalid type for id");
+        try {
+            Boolean response = iDatPhongService.updateCheckout(checkIn, checkOut, id, idPhong);
+            return ResponseEntity.ok(response);
+        } catch (ServiceException1 e) {
+            return ResponseUtil.unwrap(e.getMessage());
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
         }
-        Boolean response = iDatPhongService.updateCheckout(checkIn.toLocalDateTime() ,checkOut.toLocalDateTime(), id, idPhong);
-        return ResponseUtil.wrap(response);
     }
 
 }

@@ -77,5 +77,5 @@ public interface IDatPhongService {
 
     List<DatPhongMapping> getListMappingByCheckInAndCCCD(LocalDate checkIn, String cccd);
 
-    Boolean updateCheckout(LocalDateTime checkIn , LocalDateTime checkOut, Long id, Long idPhong);
+    Boolean updateCheckout(LocalDate checkIn , LocalDate checkOut, Long id, Long idPhong) throws ServiceException;
 }

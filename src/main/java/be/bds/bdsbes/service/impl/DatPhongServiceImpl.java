@@ -1,6 +1,7 @@
 package be.bds.bdsbes.service.impl;
 
 import be.bds.bdsbes.entities.*;
+import be.bds.bdsbes.entities.enums.RoomOrderStatus;
 import be.bds.bdsbes.entities.enums.StatusRoom;
 import be.bds.bdsbes.exception.ServiceException;
 import be.bds.bdsbes.payload.DatPhongMap;
@@ -19,6 +20,7 @@ import be.bds.bdsbes.utils.ServiceExceptionBuilderUtil;
 import be.bds.bdsbes.utils.ValidationErrorUtil;
 import be.bds.bdsbes.utils.dto.KeyValue;
 import be.bds.bdsbes.utils.dto.PagedResponse;
+import be.bds.bdsbes.utils.dto.ServiceException1;
 import be.bds.bdsbes.utils.dto.ValidationErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +28,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -694,26 +698,53 @@ public class DatPhongServiceImpl implements IDatPhongService {
     }
 
     @Override
-    public Boolean updateCheckout(LocalDateTime checkIn, LocalDateTime checkOut, Long id, Long idPhong) {
-//        if (datPhongRepository.validateCheckIn(idPhong, checkIn,checkOut)) {
-//            try {
-//                throw ServiceExceptionBuilderUtil.newBuilder()
-//                        .addError(new ValidationErrorResponse("checkIn", ValidationErrorUtil.CheckDateBook))
-//                        .build();
-//            } catch (ServiceException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
+    public Boolean updateCheckout(LocalDate checkIn, LocalDate checkOut, Long id, Long idPhong) throws ServiceException {
+        // Chuyển đổi LocalDate thành LocalDateTime
+        LocalDateTime checkOutDateTime = checkOut.atStartOfDay();
 
+        List<DatPhongResponse> listDatPhong = datPhongRepository.getAllDatPhong();
+        // Tập hợp các trạng thái hợp lệ
+        Set<Integer> validTrangThai = Set.of(RoomOrderStatus.STATUS1.getId(), RoomOrderStatus.STATUS2.getId(), 4, 5);
+        List<DatPhongResponse> filteredList = listDatPhong.stream()
+                .filter(datPhong -> validTrangThai.contains(datPhong.getTrangThai()) &&
+                        !Objects.equals(datPhong.getId(), id))
+                .collect(Collectors.toList());
 
+        for (DatPhongResponse reservation : filteredList) {
+            LocalDate existingCheckIn = LocalDate.from(reservation.getCheckIn());
+            LocalDate existingCheckOut = LocalDate.from(reservation.getCheckOut());
+
+            boolean isOverlapping = (checkOutDateTime.isAfter(existingCheckIn.atStartOfDay()) || checkOutDateTime.isEqual(existingCheckIn.atStartOfDay())) &&
+                    checkOutDateTime.isBefore(existingCheckOut.atStartOfDay());
+
+            boolean isExactMatch = checkOutDateTime.isEqual(existingCheckIn.atStartOfDay());
+
+            if (isOverlapping || isExactMatch) {
+                throw new ServiceException1("Phòng đã có khách đặt trong ngày đó", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        // Tìm kiếm đặt phòng theo id
         Optional<DatPhong> optionalDatPhong = datPhongRepository.findById(id);
         if (optionalDatPhong.isPresent()) {
+            // Nếu tìm thấy, cập nhật ngày checkOut và lưu lại
             DatPhong datPhong = optionalDatPhong.get();
-            datPhong.setCheckOut(checkOut);
-            datPhongRepository.save(datPhong);
+            datPhong.setCheckOut(checkOutDateTime);
+
+            try {
+                datPhongRepository.save(datPhong);
+            } catch (Exception e) {
+                // Xử lý nếu có lỗi trong quá trình lưu vào database
+                throw new RuntimeException("Error saving DatPhong", e);
+            }
+        } else {
+            // Xử lý nếu không tìm thấy đặt phòng
+            throw new RuntimeException("DatPhong not found with id: " + id);
         }
-        return null;
+
+        return true;
     }
+
 
     private PhongResponse1 convertToPhongResponse1(Phong phong) {
         PhongResponse1 response = new PhongResponse1();

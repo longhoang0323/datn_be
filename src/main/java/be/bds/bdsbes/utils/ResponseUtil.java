@@ -141,7 +141,16 @@ public interface ResponseUtil {
         return new ResponseEntity(response, headers, HttpStatus.OK);
     }
 
+    static ResponseEntity unwrap(Object object) {
+        return unwrap(null, object);
+    }
+
     static ResponseEntity unwrap(HttpHeaders headers, Object object) {
-        return new ResponseEntity(object, headers, HttpStatus.OK);
+        BaseDataResponse response = new BaseDataResponse();
+        response.setResponseCode(ServiceResponseCodeUtil.Failed);
+        response.setResponseMessage(ServiceResponseMessageUtil.Failed);
+        response.setBody(object);
+
+        return new ResponseEntity(object, headers, HttpStatus.BAD_REQUEST);
     }
 }

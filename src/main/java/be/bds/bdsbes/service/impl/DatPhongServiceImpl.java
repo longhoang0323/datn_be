@@ -1,13 +1,12 @@
 package be.bds.bdsbes.service.impl;
 
-import be.bds.bdsbes.domain.User;
 import be.bds.bdsbes.entities.*;
 import be.bds.bdsbes.entities.enums.StatusRoom;
 import be.bds.bdsbes.exception.ServiceException;
+import be.bds.bdsbes.payload.DatPhongMap;
 import be.bds.bdsbes.payload.DatPhongMapping;
 import be.bds.bdsbes.payload.PhongResponse1;
 import be.bds.bdsbes.repository.*;
-import be.bds.bdsbes.service.dto.KhachHangDTO;
 import be.bds.bdsbes.service.dto.MonthlyBookingDTO;
 import be.bds.bdsbes.service.iService.IDatPhongService;
 import be.bds.bdsbes.service.dto.DatPhongDTO;
@@ -35,7 +34,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -619,7 +617,7 @@ public class DatPhongServiceImpl implements IDatPhongService {
     }
 
     @Override
-    public DatPhongMapping getPhongById(Long id) {
+    public DatPhongMap getPhongById(Long id) {
         return datPhongRepository.getPhongById(id);
     }
 
@@ -681,6 +679,28 @@ public class DatPhongServiceImpl implements IDatPhongService {
     @Override
     public List<DatPhongMapping> getListMappingByCheckInAndCCCD(LocalDate checkIn, String cccd) {
         return datPhongRepository.getListDatPhongByCCCDAndCheckIn(checkIn, cccd);
+    }
+
+    @Override
+    public Boolean updateCheckout(LocalDateTime checkIn, LocalDateTime checkOut, Long id, Long idPhong) {
+//        if (datPhongRepository.validateCheckIn(idPhong, checkIn,checkOut)) {
+//            try {
+//                throw ServiceExceptionBuilderUtil.newBuilder()
+//                        .addError(new ValidationErrorResponse("checkIn", ValidationErrorUtil.CheckDateBook))
+//                        .build();
+//            } catch (ServiceException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+
+
+        Optional<DatPhong> optionalDatPhong = datPhongRepository.findById(id);
+        if (optionalDatPhong.isPresent()) {
+            DatPhong datPhong = optionalDatPhong.get();
+            datPhong.setCheckOut(checkOut);
+            datPhongRepository.save(datPhong);
+        }
+        return null;
     }
 
     private PhongResponse1 convertToPhongResponse1(Phong phong) {

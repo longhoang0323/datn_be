@@ -6,7 +6,9 @@ public enum RoomOrderStatus {
     STATUS0(0, "DH", "Đã hủy"),
     STATUS1(1, "DD", "Đã đặt"),
     STATUS2(2, "DCI", "Đã check-in"),
-    STATUS3(3, "DCO", "Đã check-out");
+    STATUS3(3, "DCO", "Đã check-out"),
+    STATUS4(4, "CXN", "Chờ xác nhận"),
+    STATUS5(5, "COM", "Check-out muộn");
 
     private int id;
 

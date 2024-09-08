@@ -29,10 +29,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.*;
 
 @Slf4j
@@ -307,8 +304,23 @@ public class DatPhongServiceImpl implements IDatPhongService {
     @Override
     public Integer updateStatus(Integer trangThai, Long id) throws ServiceException {
         DatPhong datPhong = datPhongRepository.findById(id).get();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalTime localTime = localDateTime.toLocalTime();
+        System.out.println("Thời gian hiện tại theo giờ local là: " + localDateTime);
+
+        // Lấy giờ local của một khu vực cụ thể, ví dụ: "Asia/Ho_Chi_Minh"
+        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+        LocalDateTime localDateTimeHoChiMinh = LocalDateTime.now(zoneId);
+        System.out.println("Thời gian hiện tại ở Hồ Chí Minh là: " + localDateTimeHoChiMinh);
+
         if(trangThai == 3){
-            datPhong.setThoiGianCheckOut(LocalDateTime.now());
+            if (datPhong.getCheckOut().getDayOfYear() == localDateTimeHoChiMinh.getDayOfYear()){
+                if (localTime.isAfter(LocalTime.of(12, 0))) {
+                    System.out.println(datPhong.getCheckOut().getDayOfYear() + " và " + localDateTimeHoChiMinh.getDayOfYear());
+                    System.out.println("Đã quá 12 giờ trưa.");
+                }
+            }
+            datPhong.setThoiGianCheckOut(localDateTimeHoChiMinh);
             datPhongRepository.save(datPhong);
         }
         return datPhongRepository.updateTrangThaiById(trangThai, id);

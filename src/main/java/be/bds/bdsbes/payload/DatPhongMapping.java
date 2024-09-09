@@ -90,5 +90,4 @@ public class DatPhongMapping {
     private String sdtCheckIn;
 
     private String giamGia;
-
 }

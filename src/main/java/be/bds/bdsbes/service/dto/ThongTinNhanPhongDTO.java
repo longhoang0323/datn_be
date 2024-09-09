@@ -30,4 +30,6 @@ public class ThongTinNhanPhongDTO {
     private Integer trangThaiCheckIn;
 
     private String ghiChuCheckIn;
+
+    private int soNguoi;
 }

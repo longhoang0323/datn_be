@@ -98,6 +98,11 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
 
     @Transactional
     @Modifying
+    @Query("UPDATE HoaDon h SET h.tienPhong = :tienPhong WHERE h.id = :id")
+    Integer updateTienPhongById(BigDecimal tienPhong, Long id);
+
+    @Transactional
+    @Modifying
     @Query("UPDATE HoaDon h SET h.tienPhat = :tienPhat WHERE h.id = :id")
     Integer updateTienPhatById(BigDecimal tienPhat, Long id);
 

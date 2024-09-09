@@ -729,8 +729,21 @@ public class DatPhongServiceImpl implements IDatPhongService {
         if (optionalDatPhong.isPresent()) {
             // Nếu tìm thấy, cập nhật ngày checkOut và lưu lại
             DatPhong datPhong = optionalDatPhong.get();
-            datPhong.setCheckOut(checkOutDateTime);
 
+            //Cập nhật tiền phòng và hóa đơn
+            BigDecimal giaPhong = datPhong.getPhong().getLoaiPhong().getGiaTheoNgay();
+            LocalDateTime checkOutCu = datPhong.getCheckOut();
+            int soNgay = checkOutDateTime.getDayOfYear() - checkOutCu.getDayOfYear();
+            HoaDon hoaDon = hoaDonRepository.findById(datPhong.getHoaDon().getId()).get();
+            if(soNgay > 0){
+                hoaDon.setTongTien(hoaDon.getTongTien().add(giaPhong.multiply(BigDecimal.valueOf(soNgay))));
+                this.hoaDonRepository.updateTienPhongById(hoaDon.getTienPhong().add(giaPhong.multiply(BigDecimal.valueOf(soNgay))), hoaDon.getId());
+            }
+            if(soNgay < 0){
+                hoaDon.setTongTien(hoaDon.getTongTien().subtract(giaPhong.multiply(BigDecimal.valueOf(-soNgay))));
+                this.hoaDonRepository.updateTienPhongById(hoaDon.getTienPhong().subtract(giaPhong.multiply(BigDecimal.valueOf(-soNgay))), hoaDon.getId());
+            }
+            datPhong.setCheckOut(checkOutDateTime);
             try {
                 datPhongRepository.save(datPhong);
             } catch (Exception e) {

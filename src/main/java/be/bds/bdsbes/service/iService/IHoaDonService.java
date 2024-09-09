@@ -61,6 +61,8 @@ public interface IHoaDonService {
 
     Integer updateTienCocbyId(BigDecimal tienCoc, LocalDateTime thoiGianCoc, Long id);
 
+    Integer updateTienPhongbyId(BigDecimal tienPhong, Long id);
+
     Integer updateTienPhatbyId(BigDecimal tienPhat, Long id);
 
     Integer updateTienDichVubyId(BigDecimal tienDichVu, Long id);

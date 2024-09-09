@@ -159,7 +159,7 @@ public interface DatPhongRepository extends JpaRepository<DatPhong, Long> {
             " where k.cccd = :cccd and cast(d.checkIn as date) = cast(:checkIn as date)")
     List<DatPhongMapping> getListDatPhongByCCCDAndCheckIn(LocalDate checkIn, String cccd);
 
-    @Query("select new be.bds.bdsbes.payload.CustomerUseRoom(p.ma, kh.hoTen, kh.sdt, kh.cccd, dp.trangThai) from DatPhong dp join KhachHang kh on dp.khachHang.id = kh.id join Phong p on dp.phong.id = p.id")
+    @Query("select new be.bds.bdsbes.payload.CustomerUseRoom(p.id, p.ma, kh.hoTen, kh.sdt, kh.cccd, dp.trangThai, dp.checkIn, dp.checkOut) from DatPhong dp join KhachHang kh on dp.khachHang.id = kh.id join Phong p on dp.phong.id = p.id")
     List<CustomerUseRoom> getListCustomerUseRoom();
 
 }

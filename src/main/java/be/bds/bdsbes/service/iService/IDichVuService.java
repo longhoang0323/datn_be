@@ -28,4 +28,6 @@ public interface IDichVuService {
     PagedResponse<DichVuResponse1> searchRoomService(int page, int size, String searchInput) throws ServiceException;
 
     Integer updateCongSoLuong(int soLuong, Long id);
+
+    Integer updateImage(Long id, String image);
 }

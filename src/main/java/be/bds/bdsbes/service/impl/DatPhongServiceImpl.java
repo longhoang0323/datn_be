@@ -33,10 +33,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -312,8 +309,23 @@ public class DatPhongServiceImpl implements IDatPhongService {
     @Override
     public Integer updateStatus(Integer trangThai, Long id) throws ServiceException {
         DatPhong datPhong = datPhongRepository.findById(id).get();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalTime localTime = localDateTime.toLocalTime();
+        System.out.println("Thời gian hiện tại theo giờ local là: " + localDateTime);
+
+        // Lấy giờ local của một khu vực cụ thể, ví dụ: "Asia/Ho_Chi_Minh"
+        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+        LocalDateTime localDateTimeHoChiMinh = LocalDateTime.now(zoneId);
+        System.out.println("Thời gian hiện tại ở Hồ Chí Minh là: " + localDateTimeHoChiMinh);
+
         if(trangThai == 3){
-            datPhong.setThoiGianCheckOut(LocalDateTime.now());
+            if (datPhong.getCheckOut().getDayOfYear() == localDateTimeHoChiMinh.getDayOfYear()){
+                if (localTime.isAfter(LocalTime.of(12, 0))) {
+                    System.out.println(datPhong.getCheckOut().getDayOfYear() + " và " + localDateTimeHoChiMinh.getDayOfYear());
+                    System.out.println("Đã quá 12 giờ trưa.");
+                }
+            }
+            datPhong.setThoiGianCheckOut(localDateTimeHoChiMinh);
             datPhongRepository.save(datPhong);
         }
         return datPhongRepository.updateTrangThaiById(trangThai, id);
@@ -515,7 +527,7 @@ public class DatPhongServiceImpl implements IDatPhongService {
 //                    .addError(new ValidationErrorResponse("checkIn", ValidationErrorUtil.CheckInBeforeDateNow))
 //                    .build();
 //        }
-
+        System.out.println(datPhongDTO.getCheckIn() + " " + datPhongDTO.getCheckOut());
         if (datPhongRepository.validateCheckIn(datPhongDTO.getIdPhong(), datPhongDTO.getCheckIn(), datPhongDTO.getCheckOut())) {
             throw ServiceExceptionBuilderUtil.newBuilder()
                     .addError(new ValidationErrorResponse("checkIn", ValidationErrorUtil.CheckDateBook))
@@ -718,8 +730,21 @@ public class DatPhongServiceImpl implements IDatPhongService {
         if (optionalDatPhong.isPresent()) {
             // Nếu tìm thấy, cập nhật ngày checkOut và lưu lại
             DatPhong datPhong = optionalDatPhong.get();
-            datPhong.setCheckOut(checkOutDateTime);
 
+            //Cập nhật tiền phòng và hóa đơn
+            BigDecimal giaPhong = datPhong.getPhong().getLoaiPhong().getGiaTheoNgay();
+            LocalDateTime checkOutCu = datPhong.getCheckOut();
+            int soNgay = checkOutDateTime.getDayOfYear() - checkOutCu.getDayOfYear();
+            HoaDon hoaDon = hoaDonRepository.findById(datPhong.getHoaDon().getId()).get();
+            if(soNgay > 0){
+                hoaDon.setTongTien(hoaDon.getTongTien().add(giaPhong.multiply(BigDecimal.valueOf(soNgay))));
+                this.hoaDonRepository.updateTienPhongById(hoaDon.getTienPhong().add(giaPhong.multiply(BigDecimal.valueOf(soNgay))), hoaDon.getId());
+            }
+            if(soNgay < 0){
+                hoaDon.setTongTien(hoaDon.getTongTien().subtract(giaPhong.multiply(BigDecimal.valueOf(-soNgay))));
+                this.hoaDonRepository.updateTienPhongById(hoaDon.getTienPhong().subtract(giaPhong.multiply(BigDecimal.valueOf(-soNgay))), hoaDon.getId());
+            }
+            datPhong.setCheckOut(checkOutDateTime);
             try {
                 datPhongRepository.save(datPhong);
             } catch (Exception e) {

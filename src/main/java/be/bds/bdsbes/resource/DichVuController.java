@@ -21,6 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -121,17 +124,30 @@ public class DichVuController {
         return ResponseEntity.ok(this.IDichVuService.updateCongSoLuong(soLuong, id));
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam("image") MultipartFile file) throws IOException {
-        // Lưu file vào thư mục uploads
-        if(file.getOriginalFilename() != null){
+//    @PostMapping("/upload")
+//    public ResponseEntity<?> uploadFile(@RequestParam("image") MultipartFile file) throws IOException {
+//        // Lưu file vào thư mục uploads
+//        if(file.getOriginalFilename() != null){
+//            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+//            file.transferTo(new File("uploads/" + fileName));
+//
+//            // Lưu đường dẫn vào database
+//            // ...
+//
+//            return ResponseEntity.ok().body("Image uploaded successfully: " + fileName);
+//        }
+//        return null;
+//    }
+
+    @PutMapping("/upload")
+    public ResponseEntity<?> uploadImage(@RequestBody MultipartFile file, @RequestParam(value = "id") Long id) throws IOException {
+        // Lưu file lên server
+        if(file.getOriginalFilename() != null) {
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-            file.transferTo(new File("uploads/" + fileName));
+            Path uploadPath = Paths.get("template/output");
+            Files.copy(file.getInputStream(), uploadPath.resolve(fileName));
 
-            // Lưu đường dẫn vào database
-            // ...
-
-            return ResponseEntity.ok().body("Image uploaded successfully: " + fileName);
+            return ResponseEntity.ok(IDichVuService.updateImage(id, fileName));
         }
         return null;
     }

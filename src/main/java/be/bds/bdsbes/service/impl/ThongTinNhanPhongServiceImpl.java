@@ -36,6 +36,7 @@ public class ThongTinNhanPhongServiceImpl implements IThongTinNhanPhongService {
         if(datPhongRepository.findById(thongTinNhanPhongDTO.getIdDatPhong()).isPresent()){
             DatPhong datPhong = datPhongRepository.findById(thongTinNhanPhongDTO.getIdDatPhong()).get();
             datPhong.setSoNguoi(thongTinNhanPhongDTO.getSoNguoi());
+            datPhong.setTrangThai(2);
             datPhongRepository.save(datPhong);
         }
         return thongTinNhanPhongRepository.save(thongTinNhanPhong);

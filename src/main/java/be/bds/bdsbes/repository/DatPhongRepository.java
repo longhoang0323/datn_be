@@ -2,6 +2,7 @@ package be.bds.bdsbes.repository;
 
 import be.bds.bdsbes.entities.DatPhong;
 import be.bds.bdsbes.entities.Phong;
+import be.bds.bdsbes.payload.CustomerUseRoom;
 import be.bds.bdsbes.payload.DatPhongMap;
 import be.bds.bdsbes.payload.DatPhongMapping;
 import be.bds.bdsbes.service.dto.MonthlyBookingDTO;
@@ -157,5 +158,8 @@ public interface DatPhongRepository extends JpaRepository<DatPhong, Long> {
             " from DatPhong d inner join HoaDon h on d.hoaDon.id = h.id inner join KhachHang k on k.id = d.khachHang.id right join Phong p on p.id = d.phong.id inner join ChiTietPhong ctp on p.id = ctp.phong.id left join ThongTinNhanPhong tt on d.id = tt.idDatPhong.id" +
             " where k.cccd = :cccd and cast(d.checkIn as date) = cast(:checkIn as date)")
     List<DatPhongMapping> getListDatPhongByCCCDAndCheckIn(LocalDate checkIn, String cccd);
+
+    @Query("select new be.bds.bdsbes.payload.CustomerUseRoom(p.ma, kh.hoTen, kh.sdt, kh.cccd, dp.trangThai) from DatPhong dp join KhachHang kh on dp.khachHang.id = kh.id join Phong p on dp.phong.id = p.id")
+    List<CustomerUseRoom> getListCustomerUseRoom();
 
 }

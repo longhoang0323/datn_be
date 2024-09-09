@@ -3,6 +3,7 @@ package be.bds.bdsbes.service.iService;
 
 import be.bds.bdsbes.entities.DatPhong;
 import be.bds.bdsbes.exception.ServiceException;
+import be.bds.bdsbes.payload.CustomerUseRoom;
 import be.bds.bdsbes.payload.DatPhongMap;
 import be.bds.bdsbes.payload.DatPhongMapping;
 import be.bds.bdsbes.payload.PhongResponse1;
@@ -78,4 +79,6 @@ public interface IDatPhongService {
     List<DatPhongMapping> getListMappingByCheckInAndCCCD(LocalDate checkIn, String cccd);
 
     Boolean updateCheckout(LocalDate checkIn , LocalDate checkOut, Long id, Long idPhong) throws ServiceException;
+
+    List<CustomerUseRoom> getListCustomerUseRoom();
 }

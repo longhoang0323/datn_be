@@ -4,6 +4,7 @@ import be.bds.bdsbes.entities.*;
 import be.bds.bdsbes.entities.enums.RoomOrderStatus;
 import be.bds.bdsbes.entities.enums.StatusRoom;
 import be.bds.bdsbes.exception.ServiceException;
+import be.bds.bdsbes.payload.CustomerUseRoom;
 import be.bds.bdsbes.payload.DatPhongMap;
 import be.bds.bdsbes.payload.DatPhongMapping;
 import be.bds.bdsbes.payload.PhongResponse1;
@@ -731,6 +732,18 @@ public class DatPhongServiceImpl implements IDatPhongService {
         }
 
         return true;
+    }
+
+    @Override
+    public List<CustomerUseRoom> getListCustomerUseRoom() {
+        List<CustomerUseRoom> customerUseRoomList = datPhongRepository.getListCustomerUseRoom();
+        List<CustomerUseRoom> filteredList = customerUseRoomList.stream()
+                .filter(x -> x.getTrangThaiDatPhong() == RoomOrderStatus.STATUS2.getId())
+                .sorted(Comparator.comparing(CustomerUseRoom::getMaPhong))
+//                .sorted(Comparator.comparing(CustomerUseRoom::getMaPhong).reversed()) // sx theo giảm dần
+                .collect(Collectors.toList());
+
+        return filteredList;
     }
 
 

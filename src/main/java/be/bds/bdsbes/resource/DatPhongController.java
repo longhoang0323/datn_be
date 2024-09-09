@@ -439,4 +439,9 @@ public class DatPhongController {
         }
     }
 
+    @GetMapping("/customer-use-room")
+    public ResponseEntity<?> getCustomerUseRoom() {
+        return ResponseUtil.wrap(this.iDatPhongService.getListCustomerUseRoom());
+    }
+
 }

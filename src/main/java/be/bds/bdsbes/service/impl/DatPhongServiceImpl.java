@@ -715,15 +715,17 @@ public class DatPhongServiceImpl implements IDatPhongService {
             LocalDate existingCheckIn = LocalDate.from(reservation.getCheckIn());
             LocalDate existingCheckOut = LocalDate.from(reservation.getCheckOut());
 
-            boolean isOverlapping = (checkOutDateTime.isAfter(existingCheckIn.atStartOfDay()) || checkOutDateTime.isEqual(existingCheckIn.atStartOfDay())) &&
+            boolean isOverlapping = (checkOutDateTime.isAfter(existingCheckIn.atStartOfDay()) ||
+                    checkOutDateTime.isEqual(existingCheckIn.atStartOfDay())) &&
                     checkOutDateTime.isBefore(existingCheckOut.atStartOfDay());
 
             boolean isExactMatch = checkOutDateTime.isEqual(existingCheckIn.atStartOfDay());
 
-            if (isOverlapping || isExactMatch) {
+            if (isOverlapping && !isExactMatch) {
                 throw new ServiceException1("Phòng đã có khách đặt trong ngày đó", HttpStatus.BAD_REQUEST);
             }
         }
+
 
         // Tìm kiếm đặt phòng theo id
         Optional<DatPhong> optionalDatPhong = datPhongRepository.findById(id);

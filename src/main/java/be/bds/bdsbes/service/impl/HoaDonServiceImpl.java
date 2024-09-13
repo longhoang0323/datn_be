@@ -73,7 +73,6 @@ public class HoaDonServiceImpl implements IHoaDonService {
             thongBaoRepository.save(thongBao);
             hoaDonRepository.saveAll(expiredHoaDons);
         }
-
     }
 
     public int getNumberOfRecords() {
@@ -282,6 +281,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
     @Override
     public Integer updateTrangThai(Integer trangThai, Long id) throws ServiceException {
         HoaDon hoaDon = hoaDonRepository.findById(id).get();
+        List<DatPhong> datPhongList = datPhongRepository.getRoomByHoaDon0(id);
         if (trangThai == 0) {
             if (hoaDon.getTrangThai() == 2) {
 //                this.hoaDonRepository.updateTongTienById((hoaDon.getTongTien().multiply(BigDecimal.valueOf(Double.parseDouble("95")))).divide(BigDecimal.valueOf(Double.parseDouble("100"))), id);
@@ -295,6 +295,11 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 Long idKH = khachHangRepository.findByIdUser(hoaDon.getKhachHang().getId());
                 thongBao.setUser(User.builder().id(idKH).build());
                 thongBaoRepository.save(thongBao);
+            }
+            for(DatPhong d: datPhongList){
+                d.setTienCoc(d.getTongGia().multiply(BigDecimal.valueOf(Double.parseDouble("95"))).divide(BigDecimal.valueOf(Double.parseDouble("100"))));
+                d.setTongGia(d.getTongGia().multiply(BigDecimal.valueOf(Double.parseDouble("95"))).divide(BigDecimal.valueOf(Double.parseDouble("100"))));
+                datPhongRepository.saveAll(datPhongList);
             }
             this.hoaDonRepository.save(hoaDon);
             return hoaDonRepository.updateTrangThaiById(trangThai, id);
@@ -327,6 +332,11 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 thongBao.setUser(User.builder().id(idKH).build());
                 thongBaoRepository.save(thongBao);
             }
+            for(DatPhong d: datPhongList){
+                d.setTrangThai(1);
+                d.setTienCoc(d.getTongGia().multiply(BigDecimal.valueOf(Double.parseDouble("50"))).divide(BigDecimal.valueOf(Double.parseDouble("100"))));
+                datPhongRepository.saveAll(datPhongList);
+            }
             this.hoaDonRepository.save(hoaDon);
             return hoaDonRepository.updateTrangThaiById(trangThai, id);
         }
@@ -344,19 +354,21 @@ public class HoaDonServiceImpl implements IHoaDonService {
     }
 
     @Override
-    public Boolean deleteHoaDon(HoaDonDTO hoaDonDTO) {
-        Long idKH = khachHangRepository.findByIdKhachHang(hoaDonDTO.getIdKhachHang());
-        HoaDonResponse hoaDonResponse = hoaDonRepository.getHoaDon(hoaDonDTO.getIdKhachHang(), LocalDate.now());
-        System.out.println(hoaDonResponse.getId());
-        List<DatPhong> list = datPhongRepository.getRoomByHoaDon0(hoaDonResponse.getId());
-        if (list.size() == 0) {
-            this.hoaDonRepository.delete(hoaDonRepository.findById(hoaDonResponse.getId()).get());
-            return true;
+    public Boolean deleteHoaDon() {
+//        Long idKH = khachHangRepository.findByIdKhachHang(hoaDonDTO.getIdKhachHang());
+//        HoaDonResponse hoaDonResponse = hoaDonRepository.getHoaDon(hoaDonDTO.getIdKhachHang(), LocalDate.now());
+//        System.out.println(hoaDonResponse.getId());
+        List<HoaDon> hoaDonList = hoaDonRepository.findAll();
+        for(int x = 0;x < hoaDonList.size();x++){
+            List<DatPhong> list = datPhongRepository.getRoomByHoaDon0(hoaDonList.get(x).getId());
+            if (list.isEmpty()) {
+                this.hoaDonRepository.delete(hoaDonRepository.findById(hoaDonList.get(x).getId()).get());
+            }
         }
-        return false;
+        return true;
     }
 
-    public Boolean createTaiQuay(HoaDonDTO hoaDonDTO) throws ServiceException {
+    public HoaDon createTaiQuay(HoaDonDTO hoaDonDTO) throws ServiceException {
         HoaDon hoaDon = new HoaDon();
         hoaDon.setMa(generateAutoCode());
         hoaDon.setNgayTao(LocalDateTime.now());
@@ -374,7 +386,9 @@ public class HoaDonServiceImpl implements IHoaDonService {
 //        }
         hoaDon.setKhachHang(KhachHang.builder().id(hoaDonDTO.getIdKhachHang()).build());
         hoaDonRepository.save(hoaDon);
-        return true;
+        System.out.println(hoaDonDTO.getTongTien());
+        System.out.println(hoaDonDTO.getTienPhong());
+        return hoaDon;
     }
 
     @Override
@@ -555,6 +569,26 @@ public class HoaDonServiceImpl implements IHoaDonService {
         }
         this.hoaDonRepository.updateTienHoanLaiById(hoaDon.getTienHoanLai().add(tienHoanLai), id);
         return 1;
+    }
+
+    @Override
+    public Integer updateHoaDonById(Long id, HoaDonDTO hoaDonDTO) {
+        if(hoaDonRepository.findById(hoaDonDTO.getId()).isPresent()){
+           HoaDon hoaDon = hoaDonRepository.findById(hoaDonDTO.getId()).get();
+           hoaDon.setTongTien(hoaDon.getTongTien().subtract(hoaDonDTO.getTongTien()));
+           if(hoaDon.getTienCoc() != null){
+               hoaDon.setTienCoc(hoaDon.getTienCoc().subtract(hoaDonDTO.getTienCoc()));
+           }
+           if(hoaDon.getTienDichVu() != null){
+               hoaDon.setTienDichVu(hoaDon.getTienDichVu().subtract(hoaDonDTO.getTienDichVu()));
+           }
+           if(hoaDon.getTienPhong() != null){
+               hoaDon.setTienPhong(hoaDon.getTienPhong().subtract(hoaDonDTO.getTienPhong()));
+           }
+           hoaDonRepository.save(hoaDon);
+           return 1;
+        }
+        return 0;
     }
 
     @Override

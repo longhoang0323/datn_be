@@ -43,6 +43,8 @@ public class DatPhongMap {
 
     private BigDecimal tongGia;
 
+    private BigDecimal tienCocDatPhong;
+
     private Long idDatPhong;
 
     private String tenLoaiPhong;

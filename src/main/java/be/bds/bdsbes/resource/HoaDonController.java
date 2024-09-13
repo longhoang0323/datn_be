@@ -138,8 +138,8 @@ public class HoaDonController {
     }
 
     @PostMapping("delete")
-    public ResponseEntity<?> deleteHD(@RequestBody HoaDonDTO hoaDonDTO) {
-        return ResponseUtil.wrap(this.iHoaDonService.deleteHoaDon(hoaDonDTO));
+    public ResponseEntity<?> deleteHD() {
+        return ResponseUtil.wrap(this.iHoaDonService.deleteHoaDon());
     }
 
     @GetMapping("list-by-search")
@@ -161,7 +161,7 @@ public class HoaDonController {
     @PostMapping("create-or-update-tai-quay")
     public ResponseEntity<?> createOrUpdateTaiQuay(@RequestBody HoaDonDTO hoaDonDTO) {
         try {
-            return ResponseUtil.wrap(this.iHoaDonService.createOrUpdateTaiQuay(hoaDonDTO));
+            return ResponseUtil.wrap(this.iHoaDonService.createTaiQuay(hoaDonDTO));
         } catch (Exception ex) {
             log.error(this.getClass().getName(), ex);
             return ResponseUtil.generateErrorResponse(ex);
@@ -300,5 +300,13 @@ public class HoaDonController {
         } catch (ServiceException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @PostMapping("update-tien-hoa-don")
+    public ResponseEntity<?> updateTienHoaDon(@RequestParam(value = "id") Long id,
+                                              @RequestBody HoaDonDTO hoaDonDTO) {
+        return ResponseUtil.wrap(
+                this.iHoaDonService.updateHoaDonById(id, hoaDonDTO)
+        );
     }
 }

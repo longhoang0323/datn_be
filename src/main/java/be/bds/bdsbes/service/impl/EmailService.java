@@ -35,4 +35,24 @@ public class EmailService {
 
         javaMailSender.send(message);
     }
+
+    public void sendEmailWithPoints(String to, String customerName, int points) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setTo(to);
+        helper.setFrom(senderEmail);
+        helper.setSubject("Thông báo điểm tích lũy của bạn");
+
+        String body = String.format(
+                "<h1>Xin chào %s,</h1>"
+                        + "<p>Bạn hiện có <strong>%d điểm</strong> tích lũy.</p>"
+                        + "<p>Cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của chúng tôi!</p>",
+                customerName, points
+        );
+
+        helper.setText(body, true);
+        javaMailSender.send(message);
+    }
+
 }

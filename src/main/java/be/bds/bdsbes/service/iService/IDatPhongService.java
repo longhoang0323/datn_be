@@ -76,9 +76,15 @@ public interface IDatPhongService {
 
     List<PhongResponse1> listRoomBooks(String cccd);
 
-    List<DatPhongMapping> getListMappingByCheckInAndCCCD(LocalDate checkIn, String cccd);
+    List<DatPhongMapping> getListMappingByKHAndCheckIn(LocalDate checkIn, Long id);
 
     Boolean updateCheckout(LocalDate checkIn , LocalDate checkOut, Long id, Long idPhong) throws ServiceException;
 
     List<CustomerUseRoom> getListCustomerUseRoom();
+
+    List<DatPhongMapping> checkListMappingByDate(Long id, LocalDate checkIn, LocalDate checkOut);
+
+    Integer updateIdHoaDonByDatPhong(Long id);
+
+    List<DatPhong> getCheckOutToDay(LocalDate checkOut, Long id);
 }

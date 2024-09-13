@@ -392,7 +392,8 @@ public class DatPhongController {
             @RequestParam(value = "checkOut", defaultValue = "") String checkOut
     ) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return ResponseEntity.ok(this.iDatPhongService.getListCheckOutToday(LocalDate.parse(checkOut, formatter)));
+        System.out.println(LocalDate.now());
+        return ResponseEntity.ok(this.iDatPhongService.getListCheckOutToday(LocalDate.now()));
     }
 
     @GetMapping("/get-room-check-in-today")
@@ -414,12 +415,15 @@ public class DatPhongController {
         return ResponseEntity.ok(this.iDatPhongService.listRoomBooks(cccd));
     }
 
-    @GetMapping("/list-by-cccd-check-in")
-    public ResponseEntity<?> getListMappingByCheckInAndCCCD
+    @GetMapping("/list-by-customer-and-check-in")
+    public ResponseEntity<?> getListMappingByKHAndCheckIn
             (@RequestParam(value = "checkIn", defaultValue = "") String checkIn,
-             @RequestParam(value = "cccd", defaultValue = "") String cccd) {
+             @RequestParam(value = "id", defaultValue = "") Long id) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return ResponseEntity.ok(this.iDatPhongService.getListMappingByCheckInAndCCCD(LocalDate.parse(checkIn, formatter), cccd));
+        if(checkIn == null || checkIn.isEmpty()){
+            return ResponseEntity.ok(this.iDatPhongService.getListMappingByKHAndCheckIn(null, id));
+        }
+        return ResponseEntity.ok(this.iDatPhongService.getListMappingByKHAndCheckIn(LocalDate.parse(checkIn, formatter), id));
     }
 
     @PutMapping("/update-checkout")
@@ -444,4 +448,28 @@ public class DatPhongController {
         return ResponseUtil.wrap(this.iDatPhongService.getListCustomerUseRoom());
     }
 
+    @GetMapping("/check-list-to-book")
+    public ResponseEntity<?> checkListToBook
+            (@RequestParam(name = "id") Long id,
+             @RequestParam(value = "checkIn", defaultValue = "") String checkIn,
+             @RequestParam(value = "checkOut", defaultValue = "") String checkOut) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return ResponseEntity.ok(this.iDatPhongService.checkListMappingByDate(id, LocalDate.parse(checkIn, formatter), LocalDate.parse(checkOut, formatter)));
+    }
+
+    @GetMapping("update-hoa-don-by-id")
+    public ResponseEntity<?> updateHoaDonById(
+            @RequestParam(name = "id") String id
+    ) {
+            Integer response = iDatPhongService.updateIdHoaDonByDatPhong(Long.valueOf(id));
+            return ResponseUtil.wrap(response);
+    }
+
+    @GetMapping("get-check-out-to-day")
+    public ResponseEntity<?> updateHoaDonById(
+            @RequestParam(name = "id") Long id
+    ) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return ResponseEntity.ok(this.iDatPhongService.getCheckOutToDay(LocalDate.now(), id));
+    }
 }

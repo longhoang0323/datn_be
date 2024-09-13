@@ -290,10 +290,10 @@ public class DatPhongServiceImpl implements IDatPhongService {
     public Integer updateTrangThai(Long id) throws ServiceException {
 
         DatPhong datPhong = datPhongRepository.findById(id).get();
-        if (datPhong.getCheckIn().toLocalDate().isBefore(LocalDate.now()) || datPhong.getCheckIn().toLocalDate().equals(LocalDate.now())) {
-            throw new ServiceException(ValidationErrorUtil.DeleteRoomOrder);
-        }
-        if (datPhong.getTrangThai() == 1 && datPhong.getCheckIn().toLocalDate().isAfter(LocalDate.now())) {
+//        if (datPhong.getCheckIn().toLocalDate().isBefore(LocalDate.now()) || datPhong.getCheckIn().toLocalDate().equals(LocalDate.now())) {
+//            throw new ServiceException(ValidationErrorUtil.DeleteRoomOrder);
+//        }
+        if (datPhong.getTrangThai() == 1) {
             this.datPhongRepository.updateTrangThaiById(0, id);
             HoaDon hoaDon = hoaDonRepository.findById(datPhong.getHoaDon().getId()).get();
             hoaDon.setTongTien(hoaDon.getTongTien().subtract(datPhong.getTongGia()));
@@ -694,8 +694,11 @@ public class DatPhongServiceImpl implements IDatPhongService {
     }
 
     @Override
-    public List<DatPhongMapping> getListMappingByCheckInAndCCCD(LocalDate checkIn, String cccd) {
-        return datPhongRepository.getListDatPhongByCCCDAndCheckIn(checkIn, cccd);
+    public List<DatPhongMapping> getListMappingByKHAndCheckIn(LocalDate checkIn, Long id) {
+        if(checkIn == null || checkIn.toString().isEmpty()){
+            return datPhongRepository.getListDatPhongByKH(id);
+        }
+        return datPhongRepository.getListDatPhongByKHAndCheckIn(checkIn, id);
     }
 
     @Override
@@ -782,6 +785,23 @@ public class DatPhongServiceImpl implements IDatPhongService {
         response.setGiaPhong(phong.getGiaPhong());
         response.setTrangThai(phong.getTrangThai());
         return response;
+    }
+
+    @Override
+    public List<DatPhongMapping> checkListMappingByDate(Long id, LocalDate checkIn, LocalDate checkOut) {
+        return datPhongRepository.checkListDatPhongByDate(id, checkIn, checkOut);
+    }
+
+    @Override
+    public Integer updateIdHoaDonByDatPhong(Long id) {
+        List<HoaDon> listHD = hoaDonRepository.findAll();
+        Long idHoaDon = listHD.get(listHD.size() - 1).getId();
+        return datPhongRepository.doiHoaDonById(idHoaDon, id);
+    }
+
+    @Override
+    public List<DatPhong> getCheckOutToDay(LocalDate checkOut, Long id) {
+        return datPhongRepository.getCheckOutToDay(checkOut, id);
     }
 
 }

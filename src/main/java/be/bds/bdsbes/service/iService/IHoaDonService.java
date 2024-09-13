@@ -35,9 +35,9 @@ public interface IHoaDonService {
 
     Integer updateTrangThai(Integer trangThai, Long id) throws ServiceException;
 
-    Boolean deleteHoaDon(HoaDonDTO hoaDonDTO);
+    Boolean deleteHoaDon();
 
-    Boolean createTaiQuay(HoaDonDTO hoaDonDTO) throws ServiceException;
+    HoaDon createTaiQuay(HoaDonDTO hoaDonDTO) throws ServiceException;
 
     Boolean updateTaiQuay(HoaDonDTO hoaDonDTO, Long id) throws ServiceException;
 
@@ -72,6 +72,8 @@ public interface IHoaDonService {
     Integer updateTienTichDiembyId(BigDecimal tienTichDiem, Long id);
 
     Integer updateTienHoanLaibyId(BigDecimal tienHoanLai, Long id);
+
+    Integer updateHoaDonById(Long id, HoaDonDTO hoaDonDTO);
 
     PagedResponse<HoaDonResponse> getListXacNhan(int page, int size) throws ServiceException;
 }

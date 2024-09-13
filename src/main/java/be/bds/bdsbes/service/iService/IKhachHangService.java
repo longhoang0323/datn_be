@@ -7,6 +7,7 @@ import be.bds.bdsbes.service.dto.KhachHangDTO;
 import be.bds.bdsbes.utils.dto.PagedResponse;
 import org.springframework.data.domain.Page;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 public interface IKhachHangService {
@@ -33,7 +34,7 @@ public interface IKhachHangService {
 
     KhachHangResponse1 getKHbyCccd(String cccd);
 
-    Integer updateGhiChu(String ghiChu, Long id);
+    Integer updateGhiChu(String ghiChu, Long id) throws MessagingException;
 
     Integer updateGhiChu2(String ghiChu, Long id);
 

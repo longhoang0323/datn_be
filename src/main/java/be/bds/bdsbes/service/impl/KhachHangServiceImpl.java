@@ -2,16 +2,14 @@ package be.bds.bdsbes.service.impl;
 
 import be.bds.bdsbes.domain.User;
 import be.bds.bdsbes.entities.KhachHang;
-import be.bds.bdsbes.entities.Sale;
 import be.bds.bdsbes.entities.TheThanhVien;
 import be.bds.bdsbes.exception.ServiceException;
-import be.bds.bdsbes.payload.HoaDonResponse;
 import be.bds.bdsbes.payload.KhachHangResponse1;
 import be.bds.bdsbes.repository.KhachHangRepository;
 import be.bds.bdsbes.repository.UserRepository;
-import be.bds.bdsbes.service.iService.IKhachHangService;
 import be.bds.bdsbes.service.dto.KhachHangDTO;
 import be.bds.bdsbes.service.dto.TheThanhVienDTO;
+import be.bds.bdsbes.service.iService.IKhachHangService;
 import be.bds.bdsbes.service.mapper.KhachHangMapper;
 import be.bds.bdsbes.utils.AppConstantsUtil;
 import be.bds.bdsbes.utils.ServiceExceptionBuilderUtil;
@@ -29,7 +27,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +46,9 @@ public class KhachHangServiceImpl implements IKhachHangService {
 
     @Autowired
     private KhachHangMapper khachHangMapper;
+
+    @Autowired
+    private EmailService emailService;
 
     TheThanhVienDTO theThanhVienDTO;
 
@@ -199,13 +200,17 @@ public class KhachHangServiceImpl implements IKhachHangService {
     }
 
     @Override
-    public Integer updateGhiChu(String ghiChu, Long id) {
+    public Integer updateGhiChu(String ghiChu, Long id) throws MessagingException {
         KhachHang khachHang = khachHangRepository.findById(id).get();
         if(khachHang.getGhiChu() != null && (!khachHang.getGhiChu().isEmpty() || Integer.parseInt(khachHang.getGhiChu()) > 0)){
             this.khachHangRepository.updateGhiChu(String.valueOf((Integer.parseInt(khachHang.getGhiChu()) + Integer.parseInt(ghiChu))), id);
+            // send email
+            // Thay địa chỉ bằng trg email hoặc địa chỉ save mail vào
+            emailService.sendEmailWithPoints(khachHang.getDiaChi(), khachHang.getHoTen(), Integer.parseInt(String.valueOf((Integer.parseInt(khachHang.getGhiChu()) + Integer.parseInt(ghiChu)))));
             return 1;
         }
         this.khachHangRepository.updateGhiChu(ghiChu, id);
+        emailService.sendEmailWithPoints(khachHang.getDiaChi(), khachHang.getHoTen(), Integer.parseInt(ghiChu));
         return 1;
     }
 

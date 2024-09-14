@@ -35,6 +35,8 @@ public class DatPhongMapping {
 
     private Integer soNguoi;
 
+    private String tienPhatDatPhong;
+
     private String ghiChu;
 
     private Integer trangThai;

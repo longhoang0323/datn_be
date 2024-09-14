@@ -377,6 +377,9 @@ public class HoaDonServiceImpl implements IHoaDonService {
         hoaDon.setTienPhong(hoaDonDTO.getTienPhong());
         hoaDon.setTrangThai(hoaDonDTO.getTrangThai());
         hoaDon.setGhiChu(hoaDonDTO.getGhiChu());
+        hoaDon.setTienPhat(hoaDonDTO.getTienPhat());
+        hoaDon.setTienDichVu(hoaDonDTO.getTienDichVu());
+        hoaDon.setTienThanhToan(hoaDonDTO.getTienThanhToan());
 //        Long idKhachHang = khachHangRepository.findByIdKhachHang(hoaDonDTO.getIdKhachHang());
 //        if (idKhachHang == null) {
 //            Long idKhachHang2 = khachHangRepository.findByI(hoaDonDTO.getIdKhachHang());
@@ -584,6 +587,9 @@ public class HoaDonServiceImpl implements IHoaDonService {
            }
            if(hoaDon.getTienPhong() != null){
                hoaDon.setTienPhong(hoaDon.getTienPhong().subtract(hoaDonDTO.getTienPhong()));
+           }
+           if(hoaDon.getTienPhat() != null){
+               hoaDon.setTienPhat(hoaDon.getTienPhat().subtract(hoaDonDTO.getTienPhat()));
            }
            hoaDonRepository.save(hoaDon);
            return 1;

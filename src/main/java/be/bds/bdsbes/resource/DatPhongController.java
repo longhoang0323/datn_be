@@ -472,4 +472,14 @@ public class DatPhongController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return ResponseEntity.ok(this.iDatPhongService.getCheckOutToDay(LocalDate.now(), id));
     }
+
+    @PutMapping("check-out-muon")
+    public ResponseEntity<?> checkOutMuon(@RequestParam(value = "id") Long id, @RequestBody String ghiChu) {
+        try {
+            return ResponseUtil.wrap(this.iDatPhongService.checkOutMuon(ghiChu, id));
+        } catch (ServiceException e) {
+            ApiError apiError = new ApiError(String.valueOf(StatusError.Failed), e.getMessage());
+            return ResponseUtil.wrap(apiError);
+        }
+    }
 }

@@ -804,4 +804,17 @@ public class DatPhongServiceImpl implements IDatPhongService {
         return datPhongRepository.getCheckOutToDay(checkOut, id);
     }
 
+    @Override
+    public Integer checkOutMuon(String ghiChu, Long id) throws ServiceException {
+        DatPhong datPhong = datPhongRepository.findById(id).get();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalTime localTime = localDateTime.toLocalTime();
+        System.out.println("Thời gian hiện tại theo giờ local là: " + localDateTime);
+
+        // Lấy giờ local của một khu vực cụ thể, ví dụ: "Asia/Ho_Chi_Minh"
+        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+        LocalDateTime localDateTimeHoChiMinh = LocalDateTime.now(zoneId);
+        return datPhongRepository.checkOutMuon(ghiChu, localDateTimeHoChiMinh, id);
+    }
+
 }

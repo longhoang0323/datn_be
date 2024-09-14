@@ -87,4 +87,6 @@ public interface IDatPhongService {
     Integer updateIdHoaDonByDatPhong(Long id);
 
     List<DatPhong> getCheckOutToDay(LocalDate checkOut, Long id);
+
+    Integer checkOutMuon(String ghiChu, Long id) throws ServiceException;
 }

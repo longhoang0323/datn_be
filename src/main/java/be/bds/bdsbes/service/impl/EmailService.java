@@ -45,7 +45,7 @@ public class EmailService {
         helper.setSubject("Thông báo điểm tích lũy của bạn");
 
         String body = String.format(
-                "<h1>Xin chào %s,</h1>"
+                "<h1>Khách sạn Mebunbo kính chào %s,</h1>"
                         + "<p>Bạn hiện có <strong>%d điểm</strong> tích lũy.</p>"
                         + "<p>Cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của chúng tôi!</p>",
                 customerName, points

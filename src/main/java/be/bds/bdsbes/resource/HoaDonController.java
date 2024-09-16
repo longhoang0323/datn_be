@@ -147,9 +147,11 @@ public class HoaDonController {
             @RequestParam(value = "page", defaultValue = AppConstantsUtil.DEFAULT_PAGE_NUMBER) int page,
             @RequestParam(value = "size", defaultValue = AppConstantsUtil.DEFAULT_PAGE_SIZE) int size,
             @RequestParam(value = "input", defaultValue = "") String searchInput,
-            @RequestParam(value = "trangThai", defaultValue = "") String trangThai) {
+            @RequestParam(value = "trangThai", defaultValue = "") String trangThai,
+            @RequestParam(value = "startDate", defaultValue = "") String startDate,
+            @RequestParam(value = "endDate", defaultValue = "") String endDate) {
         try {
-            return ResponseUtil.wrap(this.iHoaDonService.getHoaDonBySearch(page, size, searchInput, trangThai));
+            return ResponseUtil.wrap(this.iHoaDonService.getHoaDonBySearch(page, size, searchInput, trangThai, startDate, endDate));
         } catch (Exception ex) {
             log.error(this.getClass().getName(), ex);
             return ResponseUtil.generateErrorResponse(ex);

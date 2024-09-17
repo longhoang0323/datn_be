@@ -91,9 +91,11 @@ public class KhachHangServiceImpl implements IKhachHangService {
             KhachHang khachHang = khachHangDTO.dto(khachHangOptional.get());
             khachHang.setDiaChi(khachHangDTO.getDiaChi());
             User user = userRepository.getUserByKhachHang(khachHang.getId());
-            user.setSdt(khachHangDTO.getSdt());
-            user.setName(khachHangDTO.getHoTen());
-            this.userRepository.save(user);
+            if(user != null){
+                user.setSdt(khachHangDTO.getSdt());
+                user.setName(khachHangDTO.getHoTen());
+                this.userRepository.save(user);
+            }
             return khachHangRepository.save(khachHang);
         }
         return null;

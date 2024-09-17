@@ -318,6 +318,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 System.out.println((hoaDon.getTongTien().multiply(BigDecimal.valueOf(Double.parseDouble("95")))).divide(BigDecimal.valueOf(Double.parseDouble("100"))));
                 hoaDon.setTongTien((hoaDon.getTongTien().multiply(BigDecimal.valueOf(Double.parseDouble("95")))).divide(BigDecimal.valueOf(Double.parseDouble("100"))));
                 hoaDon.setTienPhong((hoaDon.getTienPhong().multiply(BigDecimal.valueOf(Double.parseDouble("95")))).divide(BigDecimal.valueOf(Double.parseDouble("100"))));
+                hoaDon.setTienCoc(hoaDon.getTienPhong());
                 ThongBao thongBao = new ThongBao();
                 thongBao.setNoiDung("Hóa đơn của bạn đã được xác nhận");
                 thongBao.setTrangThai(1);
@@ -402,7 +403,9 @@ public class HoaDonServiceImpl implements IHoaDonService {
         HoaDon hoaDon = new HoaDon();
         hoaDon.setMa(generateAutoCode());
         hoaDon.setNgayTao(LocalDateTime.now());
-        hoaDon.setNgayThanhToan(hoaDonDTO.getNgayThanhToan());
+        if(hoaDonDTO.getTrangThai() == 5){
+            hoaDon.setNgayThanhToan(LocalDateTime.now());
+        }
         hoaDon.setTongTien(hoaDonDTO.getTongTien());
         hoaDon.setTienPhong(hoaDonDTO.getTienPhong());
         hoaDon.setTrangThai(hoaDonDTO.getTrangThai());
@@ -609,9 +612,6 @@ public class HoaDonServiceImpl implements IHoaDonService {
         if(hoaDonRepository.findById(hoaDonDTO.getId()).isPresent()){
            HoaDon hoaDon = hoaDonRepository.findById(hoaDonDTO.getId()).get();
            hoaDon.setTongTien(hoaDon.getTongTien().subtract(hoaDonDTO.getTongTien()));
-           if(hoaDon.getTienCoc() != null){
-               hoaDon.setTienCoc(hoaDon.getTienCoc().subtract(hoaDonDTO.getTienCoc()));
-           }
            if(hoaDon.getTienDichVu() != null){
                hoaDon.setTienDichVu(hoaDon.getTienDichVu().subtract(hoaDonDTO.getTienDichVu()));
            }

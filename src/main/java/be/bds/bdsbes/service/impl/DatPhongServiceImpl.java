@@ -297,6 +297,7 @@ public class DatPhongServiceImpl implements IDatPhongService {
             this.datPhongRepository.updateTrangThaiById(0, id);
             HoaDon hoaDon = hoaDonRepository.findById(datPhong.getHoaDon().getId()).get();
             hoaDon.setTongTien(hoaDon.getTongTien().subtract(datPhong.getTongGia()));
+            hoaDon.setTienPhong(hoaDon.getTienPhong().subtract(datPhong.getTongGia()));
             this.hoaDonRepository.save(hoaDon);
             return 1;
         }

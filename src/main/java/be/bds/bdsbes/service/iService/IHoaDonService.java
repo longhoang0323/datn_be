@@ -16,7 +16,7 @@ public interface IHoaDonService {
 
     PagedResponse<HoaDonResponse> getHoaDon(int page, int size) throws ServiceException;
 
-    PagedResponse<HoaDonResponse> getHoaDonBySearch(int page, int size, String searchInput, String trangThai) throws ServiceException;
+    PagedResponse<HoaDonResponse> getHoaDonBySearch(int page, int size, String searchInput, String trangThai, String startDate, String endDate) throws ServiceException;
 
 
     PagedResponse<HoaDonResponse> getHoaDonByCustomer(int page, int size, String hoTen, String sdt) throws ServiceException;

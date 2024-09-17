@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,10 +125,39 @@ public class HoaDonServiceImpl implements IHoaDonService {
     }
 
     @Override
-    public PagedResponse<HoaDonResponse> getHoaDonBySearch(int page, int size, String searchInput, String trangThai) throws ServiceException {
+    public PagedResponse<HoaDonResponse> getHoaDonBySearch(int page, int size, String searchInput, String trangThai, String startDate, String endDate) throws ServiceException {
         // Retrieve all entities
         Pageable pageable = PageRequest.of((page - 1), size, Sort.Direction.DESC, "id");
-        if (!trangThai.isEmpty()) {
+        if (!trangThai.isEmpty() && !startDate.isEmpty() && !endDate.isEmpty()) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            Page<HoaDonResponse> entities = hoaDonRepository.getListBySearchAndTrangThaiAndDate(pageable, searchInput, Integer.parseInt(trangThai), LocalDate.parse(startDate, formatter), LocalDate.parse(endDate, formatter));
+            List<HoaDonResponse> dtos = entities.toList();
+            return new PagedResponse<>(
+                    dtos,
+                    page,
+                    size,
+                    entities.getTotalElements(),
+                    entities.getTotalPages(),
+                    entities.isLast(),
+                    entities.getSort().toString()
+            );
+        }
+        if(trangThai.isEmpty() && !startDate.isEmpty() && !endDate.isEmpty()){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            Page<HoaDonResponse> entities = hoaDonRepository.getListByDate(pageable, searchInput, LocalDate.parse(startDate, formatter), LocalDate.parse(endDate, formatter));
+            List<HoaDonResponse> dtos = entities.toList();
+            return new PagedResponse<>(
+                    dtos,
+                    page,
+                    size,
+                    entities.getTotalElements(),
+                    entities.getTotalPages(),
+                    entities.isLast(),
+                    entities.getSort().toString()
+            );
+        }
+        if(!trangThai.isEmpty()){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             Page<HoaDonResponse> entities = hoaDonRepository.getListBySearchAndTrangThai(pageable, searchInput, Integer.parseInt(trangThai));
             List<HoaDonResponse> dtos = entities.toList();
             return new PagedResponse<>(

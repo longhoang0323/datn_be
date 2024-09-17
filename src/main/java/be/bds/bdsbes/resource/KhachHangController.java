@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -93,7 +94,7 @@ public class KhachHangController {
     }
 
     @PutMapping("update-ghi-chu")
-    public ResponseEntity<?> updateGhiChu(@RequestBody String ghiChu, @RequestParam(value = "id") Long id){
+    public ResponseEntity<?> updateGhiChu(@RequestBody String ghiChu, @RequestParam(value = "id") Long id) throws MessagingException {
         return ResponseUtil.wrap(khachHangService.updateGhiChu(ghiChu, id));
     }
 
@@ -113,7 +114,12 @@ public class KhachHangController {
     }
 
     @PutMapping("tinh-lai-giam-gia")
-    public ResponseEntity<?> updateGhiChu2(@RequestBody String ghiChu, @RequestParam(value = "id") Long id){
+    public ResponseEntity<?> updateGhiChu2(@RequestBody String ghiChu, @RequestParam(value = "id") Long id) throws MessagingException{
         return ResponseUtil.wrap(khachHangService.updateGhiChu2(ghiChu, id));
+    }
+
+    @GetMapping("send-point-to-customer")
+    public ResponseEntity<?> sendPointsToCustomer(@RequestParam(value = "id") Long id) throws MessagingException {
+            return ResponseUtil.wrap(this.khachHangService.sendPointstoCustomer(id));
     }
 }

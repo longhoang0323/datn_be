@@ -742,10 +742,12 @@ public class DatPhongServiceImpl implements IDatPhongService {
             int soNgay = checkOutDateTime.getDayOfYear() - checkOutCu.getDayOfYear();
             HoaDon hoaDon = hoaDonRepository.findById(datPhong.getHoaDon().getId()).get();
             if(soNgay > 0){
+                datPhong.setTongGia(datPhong.getTongGia().add(giaPhong.multiply(BigDecimal.valueOf(soNgay))));
                 hoaDon.setTongTien(hoaDon.getTongTien().add(giaPhong.multiply(BigDecimal.valueOf(soNgay))));
                 this.hoaDonRepository.updateTienPhongById(hoaDon.getTienPhong().add(giaPhong.multiply(BigDecimal.valueOf(soNgay))), hoaDon.getId());
             }
             if(soNgay < 0){
+                datPhong.setTongGia(datPhong.getTongGia().subtract(giaPhong.multiply(BigDecimal.valueOf(-soNgay))));
                 hoaDon.setTongTien(hoaDon.getTongTien().subtract(giaPhong.multiply(BigDecimal.valueOf(-soNgay))));
                 this.hoaDonRepository.updateTienPhongById(hoaDon.getTienPhong().subtract(giaPhong.multiply(BigDecimal.valueOf(-soNgay))), hoaDon.getId());
             }
@@ -815,6 +817,16 @@ public class DatPhongServiceImpl implements IDatPhongService {
         ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
         LocalDateTime localDateTimeHoChiMinh = LocalDateTime.now(zoneId);
         return datPhongRepository.checkOutMuon(ghiChu, localDateTimeHoChiMinh, id);
+    }
+
+    @Override
+    public Integer updateTienDatPhongById(BigDecimal tienPhong, Long id) {
+        DatPhong datPhong = datPhongRepository.findById(id).get();
+        if(tienPhong != null){
+            datPhong.setTongGia(datPhong.getTongGia().subtract(tienPhong));
+        }
+        datPhongRepository.save(datPhong);
+        return 1;
     }
 
 }

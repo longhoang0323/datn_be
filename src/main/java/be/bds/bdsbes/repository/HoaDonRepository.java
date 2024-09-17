@@ -25,12 +25,22 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     Page<HoaDonResponse> getList(Pageable pageable);
 
     @Query("select new be.bds.bdsbes.payload.HoaDonResponse(p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.id, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan, p.tienHoanLai) from HoaDon p inner join p.khachHang k where (p.ghiChu like concat('%', :searchInput, '%') or " +
-            "p.khachHang.hoTen like concat('%', :searchInput, '%') or p.khachHang.cccd like concat('%', :searchInput, '%') or p.ma like concat('%', :searchInput, '%')) and (p.trangThai = :trangThai)" +
+            "p.khachHang.hoTen like concat('%', :searchInput, '%') or p.khachHang.cccd like concat('%', :searchInput, '%') or p.khachHang.sdt like concat('%', :searchInput, '%') or p.ma like concat('%', :searchInput, '%')) and (p.trangThai = :trangThai) and (cast(p.ngayThanhToan as date) between cast(:startDate as date) and cast(:endDate as date))" +
+            "group by k.id, p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan, p.tienHoanLai")
+    Page<HoaDonResponse> getListBySearchAndTrangThaiAndDate(Pageable pageable, String searchInput, int trangThai, LocalDate startDate, LocalDate endDate);
+
+    @Query("select new be.bds.bdsbes.payload.HoaDonResponse(p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.id, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan, p.tienHoanLai) from HoaDon p inner join p.khachHang k where (p.ghiChu like concat('%', :searchInput, '%') or " +
+            "p.khachHang.hoTen like concat('%', :searchInput, '%') or p.khachHang.cccd like concat('%', :searchInput, '%') or p.khachHang.sdt like concat('%', :searchInput, '%') or p.ma like concat('%', :searchInput, '%')) and (cast(p.ngayThanhToan as date) between cast(:startDate as date) and cast(:endDate as date))" +
+            "group by k.id, p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan, p.tienHoanLai")
+    Page<HoaDonResponse> getListByDate(Pageable pageable, String searchInput, LocalDate startDate, LocalDate endDate);
+
+    @Query("select new be.bds.bdsbes.payload.HoaDonResponse(p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.id, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan, p.tienHoanLai) from HoaDon p inner join p.khachHang k where (p.ghiChu like concat('%', :searchInput, '%') or " +
+            "p.khachHang.hoTen like concat('%', :searchInput, '%') or p.khachHang.cccd like concat('%', :searchInput, '%') or p.khachHang.sdt like concat('%', :searchInput, '%') or p.ma like concat('%', :searchInput, '%')) and (p.trangThai = :trangThai)" +
             "group by k.id, p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan, p.tienHoanLai")
     Page<HoaDonResponse> getListBySearchAndTrangThai(Pageable pageable, String searchInput, int trangThai);
 
     @Query("select new be.bds.bdsbes.payload.HoaDonResponse(p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.id, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan, p.tienHoanLai) from HoaDon p inner join p.khachHang k where (p.ghiChu like concat('%', :searchInput, '%') or " +
-            "p.khachHang.hoTen like concat('%', :searchInput, '%') or p.khachHang.cccd like concat('%', :searchInput, '%') or p.ma like concat('%', :searchInput, '%')) " +
+            "p.khachHang.hoTen like concat('%', :searchInput, '%') or p.khachHang.cccd like concat('%', :searchInput, '%') or p.khachHang.sdt like concat('%', :searchInput, '%') or p.ma like concat('%', :searchInput, '%')) " +
             "group by k.id, p.id, p.ma, p.ngayTao, p.ngayThanhToan, p.tongTien, p.trangThai, p.ghiChu, k.hoTen, p.tienCoc, p.thoiGianCoc, p.tienPhong, p.tienDichVu, p.tienPhat, p.tienTichDiem, p.tienThanhToan, p.tienHoanLai")
     Page<HoaDonResponse> getListBySearch(Pageable pageable, String searchInput);
 

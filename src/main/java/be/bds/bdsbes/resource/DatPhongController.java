@@ -482,4 +482,9 @@ public class DatPhongController {
             return ResponseUtil.wrap(apiError);
         }
     }
+
+    @PutMapping("update-tien-phong-by-id")
+    public ResponseEntity<?> updateTienPhong(@RequestParam(value = "id") Long id, @RequestBody BigDecimal tienPhong) {
+        return ResponseUtil.wrap(this.iDatPhongService.updateTienDatPhongById(tienPhong, id));
+    }
 }

@@ -89,6 +89,7 @@ public class KhachHangServiceImpl implements IKhachHangService {
         Optional<KhachHang> khachHangOptional = khachHangRepository.findById(id);
         if(khachHangOptional.isPresent()){
             KhachHang khachHang = khachHangDTO.dto(khachHangOptional.get());
+            khachHang.setDiaChi(khachHangDTO.getDiaChi());
             User user = userRepository.getUserByKhachHang(khachHang.getId());
             user.setSdt(khachHangDTO.getSdt());
             user.setName(khachHangDTO.getHoTen());
@@ -140,6 +141,7 @@ public class KhachHangServiceImpl implements IKhachHangService {
                     kh.setHoTen(khachHangDTO.getHoTen());
                     kh.setCccd(khachHangDTO.getCccd());
                     kh.setNgaySinh(khachHangDTO.getNgaySinh());
+                    kh.setDiaChi(khachHangDTO.getDiaChi());
                     this.khachHangRepository.save(kh);
                     return true;
                 }
@@ -206,17 +208,25 @@ public class KhachHangServiceImpl implements IKhachHangService {
             this.khachHangRepository.updateGhiChu(String.valueOf((Integer.parseInt(khachHang.getGhiChu()) + Integer.parseInt(ghiChu))), id);
             // send email
             // Thay địa chỉ bằng trg email hoặc địa chỉ save mail vào
-            emailService.sendEmailWithPoints(khachHang.getDiaChi(), khachHang.getHoTen(), Integer.parseInt(String.valueOf((Integer.parseInt(khachHang.getGhiChu()) + Integer.parseInt(ghiChu)))));
+            if(khachHang.getDiaChi() != null && !khachHang.getDiaChi().isEmpty()) {
+                emailService.sendEmailWithPoints(khachHang.getDiaChi(), khachHang.getHoTen(), Integer.parseInt(String.valueOf((Integer.parseInt(khachHang.getGhiChu()) + Integer.parseInt(ghiChu)))));
+            }
             return 1;
         }
         this.khachHangRepository.updateGhiChu(ghiChu, id);
-        emailService.sendEmailWithPoints(khachHang.getDiaChi(), khachHang.getHoTen(), Integer.parseInt(ghiChu));
+        if(khachHang.getDiaChi() != null && !khachHang.getDiaChi().isEmpty()){
+            emailService.sendEmailWithPoints(khachHang.getDiaChi(), khachHang.getHoTen(), Integer.parseInt(ghiChu));
+        }
         return 1;
     }
 
     @Override
-    public Integer updateGhiChu2(String ghiChu, Long id) {
+    public Integer updateGhiChu2(String ghiChu, Long id) throws MessagingException {
+        KhachHang khachHang = khachHangRepository.findById(id).get();
         this.khachHangRepository.updateGhiChu(ghiChu, id);
+        if(khachHang.getDiaChi() != null && !khachHang.getDiaChi().isEmpty()){
+            emailService.sendEmailWithPoints(khachHang.getDiaChi(), khachHang.getHoTen(), Integer.parseInt(ghiChu));
+        }
         return 1;
     }
 
@@ -234,6 +244,15 @@ public class KhachHangServiceImpl implements IKhachHangService {
                 entities.isLast(),
                 entities.getSort().toString()
         );
+    }
+
+    @Override
+    public Integer sendPointstoCustomer(Long id) throws MessagingException {
+        KhachHang khachHang = khachHangRepository.findById(id).get();
+        if(khachHang.getDiaChi() != null && !khachHang.getDiaChi().isEmpty()){
+            this.emailService.sendEmailWithPoints(khachHang.getDiaChi(), khachHang.getHoTen(), Integer.parseInt(khachHang.getGhiChu()));
+        }
+        return 1;
     }
 
     @Scheduled(cron = "0 0 0 1 * ?")
